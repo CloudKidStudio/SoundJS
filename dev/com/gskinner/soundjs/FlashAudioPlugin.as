@@ -568,7 +568,7 @@ class SoundWrapper extends EventDispatcher {
 			return;
 		}
 		if (!_paused) {
-			channel = sound.play(startAt);
+			channel = sound.play(startAt, loop == -1 ? int.MAX_VALUE : 0);
 			channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete, false, 0, true);
 		} else {
             offset = startAt;  // allows you to set position on a paused or stopped sound

@@ -308,6 +308,10 @@ this.createjs = this.createjs || {};
 		handleFlashReady:function () {
 			this.flashReady = true;
 
+			//set the master mute in case it was set before the flash plugin was ready
+			var newVolume = createjs.Sound.masterMute ? 0 : this.volume;
+			this.flash.setMasterVolume(newVolume);
+			
 			// Anything that needed to be preloaded, can now do so.
 			for (var i = 0, l = this.queuedInstances.length; i < l; i++) {
 				this.flash.register(this.queuedInstances[i]);  // NOTE this flash function currently does nothing
@@ -474,7 +478,7 @@ this.createjs = this.createjs || {};
 		 */
 		updateVolume:function () {
 			var newVolume = createjs.Sound.masterMute ? 0 : this.volume;
-			return this.flash.setMasterVolume(newVolume);
+			return this.flashReady ? this.flash.setMasterVolume(newVolume) : true;
 		},
 
 		/**

@@ -19,7 +19,7 @@
 	 * @type String
 	 * @static
 	 **/
-	o.version = /*version*/"NEXT"; // injected by build process
+	o.version = /*version*/"0.4.2"; // injected by build process
 
 	/**
 	 * The build date for this release in UTC format.
@@ -27,6 +27,6 @@
 	 * @type String
 	 * @static
 	 **/
-	o.buildDate = /*date*/"Mon, 24 Jun 2013 17:07:33 GMT"; // injected by build process
+	o.buildDate = /*date*/"Thu, 11 Jul 2013 17:49:38 GMT"; // injected by build process
 
 })();

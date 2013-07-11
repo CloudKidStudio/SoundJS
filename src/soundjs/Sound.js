@@ -497,6 +497,7 @@ this.createjs = this.createjs || {};
 	 */
 	s.sendFileLoadEvent = function (src) {
 		if (!s.preloadHash[src]) {
+			s.preloadHash[src] = [true];//set this to true so it is still valid to detect if the audio has been loaded
 			return;
 		}
 		for (var i = 0, l = s.preloadHash[src].length; i < l; i++) {
@@ -968,7 +969,7 @@ this.createjs = this.createjs || {};
 		} else {
 			src = s.getSrcById(src);
 		}
-		return (s.preloadHash[src][0] == true);  // src only loads once, so if it's true for the first it's true for all
+		return (s.preloadHash[src] && s.preloadHash[src][0] == true);  // src only loads once, so if it's true for the first it's true for all
 	}
 
 	/**
