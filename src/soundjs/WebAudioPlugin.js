@@ -1479,6 +1479,11 @@ this.createjs = this.createjs || {};
 			this.progress = 1;
 			this.result = decodedAudio;
 			this.src = this.originalSrc;
+			
+			//Dirty hack to make sure Sound.loadComplete() functions as advertised
+			if (!createjs.Sound.preloadHash[this.src]) createjs.Sound.preloadHash[this.src] = [true];
+			//end hack
+			
 			this.owner.addPreloadResults(this.src, this.result);
 			this.onload && this.onload();
 		},
