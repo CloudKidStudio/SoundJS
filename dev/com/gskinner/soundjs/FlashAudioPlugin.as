@@ -9,6 +9,7 @@
 	import flash.events.IOErrorEvent;
 	import flash.events.ErrorEvent;
 	import flash.utils.Dictionary;
+	import flash.system.Security;
 	
 	public class FlashAudioPlugin extends Sprite {
 		
@@ -45,6 +46,7 @@
 		
 	// Initialization:
 		public function FlashAudioPlugin() {
+			Security.allowDomain("*");
 			configUI();
 			initializeInterface();
 		}
@@ -569,7 +571,13 @@ class SoundWrapper extends EventDispatcher {
 		}
 		if (!_paused) {
 			channel = sound.play(startAt, loop == -1 ? int.MAX_VALUE : 0);
-			channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete, false, 0, true);
+			if(channel)
+				channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete, false, 0, true);
+			else
+			{
+				owner.log("Error - could not play sound: " + id);
+				dispatchEvent(new Event(Event.SOUND_COMPLETE));
+			}
 		} else {
             offset = startAt;  // allows you to set position on a paused or stopped sound
         }
