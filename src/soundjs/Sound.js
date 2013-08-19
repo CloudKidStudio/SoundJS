@@ -1222,7 +1222,38 @@ this.createjs = this.createjs || {};
 			instances[i].stop();  // NOTE stop removes instance from this.instances
 		}
 	}
-
+	
+	/**
+	 * Pauses all audio (global pause on existing audio).
+	 *
+	 * <h4>Example</h4>
+	 *     createjs.Sound.pause();
+	 *
+	 * @method pause
+	 * @static
+	 */
+	s.pause = function () {
+		var instances = this.instances;
+		for (var i = instances.length; i--; ) {
+			instances[i].pause();
+		}
+	}
+	
+	/**
+	 * Resumes all audio (global resume on existing audio).
+	 *
+	 * <h4>Example</h4>
+	 *     createjs.Sound.resume();
+	 *
+	 * @method resume
+	 * @static
+	 */
+	s.resume = function () {
+		var instances = this.instances;
+		for (var i = instances.length; i--; ) {
+			instances[i].resume();
+		}
+	}
 
 	/* ---------------
 	 Internal methods
