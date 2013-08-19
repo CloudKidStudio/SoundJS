@@ -935,6 +935,10 @@ this.createjs = this.createjs || {};
 			if(this.remainingLoops != 0) {
 				this.sourceNodeNext = this.createAndPlayAudioNode(this.startTime, 0);
 			}
+			if(event === null && this.offset > 0)
+			{
+				this.offset = 0;
+			}
 		},
 
 		/**

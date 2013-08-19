@@ -500,7 +500,7 @@ class SoundWrapper extends EventDispatcher {
 	 */
 	public function resume():void {
 		_paused = false;
-        startSound(offset);
+        startSound(offset, true);
 	}
 	
 	/**
@@ -563,14 +563,14 @@ class SoundWrapper extends EventDispatcher {
 	}
 	
 	// Begin playing the sound at a certain position.
-	protected function startSound(startAt:Number):void {
+	protected function startSound(startAt:Number, isResuming:Boolean = false):void {
 		if (startAt > sound.length) {
 			owner.log("Can not play, out of range");
 			dispatchEvent(new Event(Event.SOUND_COMPLETE));
 			return;
 		}
 		if (!_paused) {
-			channel = sound.play(startAt, loop == -1 ? int.MAX_VALUE : 0);
+			channel = sound.play(startAt, (loop == -1 && !isResuming) ? int.MAX_VALUE : 0);
 			if(channel)
 				channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete, false, 0, true);
 			else
@@ -603,7 +603,7 @@ class SoundWrapper extends EventDispatcher {
 	protected function handleSoundComplete(event:Event):void {
         offset = 0;  // have to set this as it can be set by pause during playback
         if (loop != 0) {
-            loop--;  // NOTE this introduces a theoretical limit on loops = float max size x 2 - 1
+            if(loop > 0) loop--;  // NOTE this introduces a theoretical limit on loops = float max size x 2 - 1
 
             startSound(offset);
 

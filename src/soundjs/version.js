@@ -27,6 +27,6 @@
 	 * @type String
 	 * @static
 	 **/
-	o.buildDate = /*date*/"Mon, 19 Aug 2013 14:55:22 GMT"; // injected by build process
+	o.buildDate = /*date*/"Mon, 19 Aug 2013 16:16:10 GMT"; // injected by build process
 
 })();
