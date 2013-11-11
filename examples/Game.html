@@ -44,12 +44,14 @@
     <script type="text/javascript" src="./assets/easeljs-NEXT.min.js"></script>
     <script type="text/javascript" src="./assets/preloadjs-NEXT.min.js"></script>
 
-    <script type="text/javascript" src="../src/easeljs/events/EventDispatcher.js"></script>
+	<!-- Note: All SoundJS classes are listed here: -->
+	<script type="text/javascript" src="../src/createjs/utils/Proxy.js"></script>
+	<script type="text/javascript" src="../src/createjs/utils/IndexOf.js"></script>
+	<script type="text/javascript" src="../src/createjs/events/Event.js"></script>
+	<script type="text/javascript" src="../src/createjs/events/EventDispatcher.js"></script>
     <script type="text/javascript" src="../src/soundjs/Sound.js"></script>
     <script type="text/javascript" src="../src/soundjs/WebAudioPlugin.js"></script>
     <script type="text/javascript" src="../src/soundjs/HTMLAudioPlugin.js"></script>
-    <script type="text/javascript" src="../src/swfobject.js"></script>
-    <script type="text/javascript" src="../src/soundjs/FlashPlugin.js"></script>
 
     <!-- We also provide hosted minified versions of all CreateJS libraries.
         http://code.createjs.com -->
@@ -136,11 +138,11 @@
         // begin loading content (only sounds to load)
         var assetsPath = "assets/";
         manifest = [
-            {id:"begin", src:"Game-Spawn.mp3|Game-Spawn.ogg"},
-            {id:"break", src:"Game-Break.mp3|Game-Break.ogg", data:6},
-            {id:"death", src:"Game-Death.mp3|Game-Death.ogg"},
-            {id:"laser", src:"Game-Shot.mp3|Game-Shot.ogg", data:6},
-            {id:"music", src:"18-machinae_supremacy-lord_krutors_dominion.mp3|18-machinae_supremacy-lord_krutors_dominion.ogg"}
+            {id:"begin", src:"Game-Spawn.ogg|Game-Spawn.mp3"},
+            {id:"break", src:"Game-Break.ogg|Game-Break.mp3", data:6},
+            {id:"death", src:"Game-Death.ogg|Game-Death.mp3"},
+            {id:"laser", src:"Game-Shot.ogg|Game-Shot.mp3", data:6},
+            {id:"music", src:"18-machinae_supremacy-lord_krutors_dominion.ogg|18-machinae_supremacy-lord_krutors_dominion.mp3"}
         ];
 
         preload = new createjs.LoadQueue();
@@ -168,7 +170,7 @@
         messageField.text = "Welcome:  Click to play";
 
         // start the music
-        createjs.Sound.play("music", createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 0.4);
+        createjs.Sound.play("music", {interrupt:createjs.Sound.INTERRUPT_NONE, loop:-1, volume:0.4});
 
         watchRestart();
     }
@@ -350,7 +352,7 @@
                     bulletStream[bullet].active = false;
 
                     // play sound
-                    createjs.Sound.play("break", createjs.Sound.INTERUPT_LATE, 0, 0.8);
+                    createjs.Sound.play("break", {interrupt: createjs.Sound.INTERUPT_LATE, offset:0.8});
                 }
             }
         }

@@ -1,0 +1,5978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/SoundJS_16x16.png">
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+	<title>SoundJS v0.5.0 API Documentation : SoundInstance</title>  
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><a href="http://www.createjs.com/#!/SoundJS"><img src="http://createjs.com/resources/SuiteIcons/SoundJS/docs-icon-SoundJS.png" title="SoundJS"></a></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Documentation for: 0.5.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Event.html">Event</a></li>
+            
+                <li><a href="../classes/EventDispatcher.html">EventDispatcher</a></li>
+            
+                <li><a href="../classes/FlashPlugin.html">FlashPlugin</a></li>
+            
+                <li><a href="../classes/HTMLAudioPlugin.html">HTMLAudioPlugin</a></li>
+            
+                <li><a href="../classes/Sound.html">Sound</a></li>
+            
+                <li><a href="../classes/SoundInstance.html">SoundInstance</a></li>
+            
+                <li><a href="../classes/SoundJS.html">SoundJS</a></li>
+            
+                <li><a href="../classes/Utility Methods.html">Utility Methods</a></li>
+            
+                <li><a href="../classes/WebAudioPlugin.html">WebAudioPlugin</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/CreateJS.html">CreateJS</a></li>
+            
+                <li><a href="../modules/SoundJS.html">SoundJS</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+            <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>SoundInstance Class</h1>
+<div class="box meta">
+    
+        <div class="uses">
+            Uses
+            <ul class="inline commas">
+                
+                    <li><a href="EventDispatcher.html">EventDispatcher</a></li>
+                
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l503"><code>SoundInstance:503</code></a>
+        </div>
+    
+
+    
+        
+            Module: <a href="../modules/SoundJS.html">SoundJS</a>
+        
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>A SoundInstance is created when any calls to the Sound API method <a href="../classes/Sound.html#method_play" class="crosslink">play</a> or
+<a href="../classes/Sound.html#method_createInstance" class="crosslink">createInstance</a> are made. The SoundInstance is returned by the active plugin
+for control by the user.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> var myInstance = createjs.Sound.play("myAssetPath/mySrcFile.mp3");</code></pre>
+<p>A number of additional parameters provide a quick way to determine how a sound is played. Please see the Sound
+API method <a href="../classes/Sound.html#method_play" class="crosslink">play</a> for a list of arguments.</p>
+<p>Once a SoundInstance is created, a reference can be stored that can be used to control the audio directly through
+the SoundInstance. If the reference is not stored, the SoundInstance will play out its audio (and any loops), and
+is then de-referenced from the <a href="../classes/Sound.html" class="crosslink">Sound</a> class so that it can be cleaned up. If audio
+playback has completed, a simple call to the <a href="../classes/SoundInstance.html#method_play" class="crosslink">play</a> instance method
+will rebuild the references the Sound class need to control it.</p>
+<pre class="code prettyprint"><code> var myInstance = createjs.Sound.play("myAssetPath/mySrcFile.mp3");
+ myInstance.addEventListener("complete", playAgain);
+ function playAgain(event) {
+     myInstance.play();
+ }</code></pre>
+<p>Events are dispatched from the instance to notify when the sound has completed, looped, or when playback fails</p>
+<pre class="code prettyprint"><code> var myInstance = createjs.Sound.play("myAssetPath/mySrcFile.mp3");
+ myInstance.addEventListener("complete", handleComplete);
+ myInstance.addEventListener("loop", handleLoop);
+ myInstance.addEventListener("failed", handleFailed);</code></pre>
+
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_SoundInstance" class="method item">
+    <h3 class="name"><code>SoundInstance</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>src</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>owner</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l503"><code>SoundInstance:503</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">src</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The path to and file name of the sound.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">owner</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The plugin instance that created this SoundInstance.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+        
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method protected inherited">
+                                <a href="#method__dispatchEvent">_dispatchEvent</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_addEventListener">addEventListener</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_beginPlaying">beginPlaying</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_cleanup">cleanup</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_createAudioNode">createAudioNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_dispatchEvent">dispatchEvent</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getDuration">getDuration</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getMute">getMute</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getPan">getPan</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getPosition">getPosition</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getVolume">getVolume</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_hasEventListener">hasEventListener</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_init">init</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected inherited">
+                                <a href="#method_initialize">initialize</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_interrupt">interrupt</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method deprecated">
+                                <a href="#method_mute">mute</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_off">off</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_on">on</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_pause">pause</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_play">play</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_removeAllEventListeners">removeAllEventListeners</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_removeEventListener">removeEventListener</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_resume">resume</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_sendEvent">sendEvent</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setMute">setMute</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setPan">setPan</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setPosition">setPosition</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setVolume">setVolume</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_stop">stop</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_toString">toString</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_updateVolume">updateVolume</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property protected inherited">
+                                <a href="#property__captureListeners">_captureListeners</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected inherited">
+                                <a href="#property__listeners">_listeners</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_delay">delay</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_delayTimeoutId">delayTimeoutId</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_gainNode">gainNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_muted">muted</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_offset">offset</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property deprecated">
+                                <a href="#property_onComplete">onComplete</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item property deprecated">
+                                <a href="#property_onLoop">onLoop</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item property deprecated">
+                                <a href="#property_onPlayFailed">onPlayFailed</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item property deprecated">
+                                <a href="#property_onPlayInterrupted">onPlayInterrupted</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item property deprecated">
+                                <a href="#property_onPlaySucceeded">onPlaySucceeded</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item property deprecated">
+                                <a href="#property_onReady">onReady</a>
+
+                                
+                                
+                                    <span class="flag deprecated">deprecated</span>
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_owner">owner</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_pan">pan</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_pan">pan</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_panNode">panNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_paused">paused</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_playState">playState</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_remainingLoops">remainingLoops</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_soundCompleteTimeout">soundCompleteTimeout</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_sourceNode">sourceNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_sourceNodeNext">sourceNodeNext</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_src">src</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property_startTime">startTime</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_uniqueId">uniqueId</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_volume">volume</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events">
+                        
+                            <li class="index-item event">
+                                <a href="#event_complete">complete</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_failed">failed</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_interrupted">interrupted</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_loop">loop</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_ready">ready</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_succeeded">succeeded</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__dispatchEvent" class="method item protected inherited">
+    <h3 class="name"><code>_dispatchEvent</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>eventObj</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>eventPhase</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method__dispatchEvent">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l348"><code>_dispatchEvent:348</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventObj</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> | <a href="../classes/Event.html" class="crosslink">Event</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventPhase</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_addEventListener" class="method item inherited">
+    <h3 class="name"><code>addEventListener</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>listener</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[useCapture]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_addEventListener">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l141"><code>addEventListener:141</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><p>Adds the specified event listener. Note that adding multiple listeners to the same function will result in
+multiple callbacks getting fired.</p></p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> displayObject.addEventListener("click", handleClick);
+ function handleClick(event) {
+    // Click happened.
+ }</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The string type of the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">listener</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An object with a handleEvent method, or a function that will be called when
+the event is dispatched.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[useCapture]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>For events that bubble, indicates whether to listen for the event in the capture or bubbling/target phase.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>:
+                    
+                    <p>Returns the listener for chaining or assignment.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_beginPlaying" class="method item protected">
+    <h3 class="name"><code>beginPlaying</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>offset</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>loop</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>volume</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>pan</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1077"><code>beginPlaying:1077</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Called by the Sound class when the audio is ready to play (delay has completed). Starts sound playing if the
+src is loaded, otherwise playback will fail.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">offset</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>How far into the sound to begin playback, in milliseconds.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">loop</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The number of times to loop the audio. Use -1 for infinite loops.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">volume</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The volume of the sound, between 0 and 1.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">pan</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The pan of the sound between -1 (left) and 1 (right). Note that pan does not work for HTML Audio.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_cleanup" class="method item protected">
+    <h3 class="name"><code>cleanup</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l931"><code>cleanup:931</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Clean up the instance. Remove references and clean up any additional properties such as timers.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_createAudioNode" class="method item protected">
+    <h3 class="name"><code>createAudioNode</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>startTime</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>offset</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">AudioNode</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1025"><code>createAudioNode:1025</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 0.4.1</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Creates an audio node using the current src and context, connects it to the gain node, and starts playback.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">startTime</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The time to add this to the web audio context, in seconds.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">offset</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The amount of time into the src audio to start playback, in seconds.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">AudioNode</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_dispatchEvent" class="method item inherited">
+    <h3 class="name"><code>dispatchEvent</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>eventObj</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[target]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_dispatchEvent">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l279"><code>dispatchEvent:279</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><p>Dispatches the specified event to all listeners.</p></p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> // Use a string event
+ this.dispatchEvent("complete");
+
+ // Use an Event instance
+ var event = new createjs.Event("progress");
+ this.dispatchEvent(event);</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventObj</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> | <a href="../classes/Event.html" class="crosslink">Event</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An object with a "type" property, or a string type.
+While a generic object will work, it is recommended to use a CreateJS Event instance. If a string is used,
+dispatchEvent will construct an Event instance with the specified type.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[target]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The object to use as the target property of the event object. This will default to the
+dispatching object. <b>This parameter is deprecated and will be removed.</b></p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>Returns the value of eventObj.defaultPrevented.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getDuration" class="method item">
+    <h3 class="name"><code>getDuration</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1360"><code>getDuration:1360</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the duration of the instance, in milliseconds. Note in most cases, you need to play a sound using
+<a href="../classes/SoundInstance.html#method_play" class="crosslink">play</a> or the Sound API Sound.play
+method before its duration can be reported accurately.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>var soundDur = myInstance.getDuration();</code></pre>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>:
+                    
+                    <p>The duration of the sound instance in milliseconds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getMute" class="method item">
+    <h3 class="name"><code>getMute</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1260"><code>getMute:1260</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Get the mute value of the instance.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> var isMuted = myInstance.getMute();</code></pre>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>If the sound is muted.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getPan" class="method item">
+    <h3 class="name"><code>getPan</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1295"><code>getPan:1295</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE that you can get volume directly, and getPan remains to allow support for IE8 with FlashPlugin.</p>
+<p>Get the left/right pan of the instance. Note in WebAudioPlugin this only gives us the "x" value of what is
+actually 3D audio.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>var myPan = myInstance.getPan();</code></pre>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>:
+                    
+                    <p>The value of the pan, between -1 (left) and 1 (right).</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getPosition" class="method item">
+    <h3 class="name"><code>getPosition</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1312"><code>getPosition:1312</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the position of the playhead in the instance in milliseconds.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>var currentOffset = myInstance.getPosition();</code></pre>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>:
+                    
+                    <p>The position of the playhead in the sound, in milliseconds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getVolume" class="method item">
+    <h3 class="name"><code>getVolume</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1216"><code>getVolume:1216</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE that you can get volume directly, and getVolume remains to allow support for IE8 with FlashPlugin.</p>
+<p>Get the volume of the instance. The actual output volume of a sound can be calculated using:
+<code>myInstance.getVolume() * createjs.Sound.getVolume();</code></p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    <p>The current volume of the sound instance.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_hasEventListener" class="method item inherited">
+    <h3 class="name"><code>hasEventListener</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_hasEventListener">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l328"><code>hasEventListener:328</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Indicates whether there is at least one listener for the specified event type and <code>useCapture</code> value.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The string type of the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>Returns true if there is at least one listener for the specified event.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_init" class="method item protected">
+    <h3 class="name"><code>init</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>src</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>owner</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l905"><code>init:905</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initialize the SoundInstance. This is called from the constructor.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">src</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The source of the audio.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">owner</code>
+                        <span class="type">Class</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The plugin that created this instance.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initialize" class="method item protected inherited">
+    <h3 class="name"><code>initialize</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_initialize">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l133"><code>initialize:133</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initialization method.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_interrupt" class="method item protected">
+    <h3 class="name"><code>interrupt</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l974"><code>interrupt:974</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The sound has been interrupted.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_mute" class="method item deprecated">
+    <h3 class="name"><code>mute</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>value</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+        <span class="flag deprecated" title="This method has been replaced by setMute.">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1229"><code>mute:1229</code></a>
+        
+        </p>
+
+
+        
+            <p>Deprecated: This method has been replaced by setMute.</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>REMOVED. <strong>Please use <a href="../classes/SoundInstance.html#method_setMute" class="crosslink">setMute</a> instead</strong>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">value</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If the sound should be muted or not.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>If the mute call succeeds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_off" class="method item inherited">
+    <h3 class="name"><code>off</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>listener</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[useCapture]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_off">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l246"><code>off:246</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A shortcut to the removeEventListener method, with the same parameters and return value. This is a companion to the
+.on method.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The string type of the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">listener</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The listener function or object.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[useCapture]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>For events that bubble, indicates whether to listen for the event in the capture or bubbling/target phase.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_on" class="method item inherited">
+    <h3 class="name"><code>on</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>listener</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[scope]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[once=false]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[data]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[useCapture=false]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_on">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l174"><code>on:174</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><p>A shortcut method for using addEventListener that makes it easier to specify an execution scope, have a listener
+only run once, associate arbitrary data with the listener, and remove the listener.</p></p>
+<p><p>This method works by creating an anonymous wrapper function and subscribing it with addEventListener.
+The created anonymous function is returned for use with .removeEventListener (or .off).</p></p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>    var listener = myBtn.on("click", handleClick, null, false, {count:3});
+    function handleClick(evt, data) {
+        data.count -= 1;
+        console.log(this == myBtn); // true - scope defaults to the dispatcher
+        if (data.count == 0) {
+            alert("clicked 3 times!");
+            myBtn.off("click", listener);
+            // alternately: evt.remove();
+        }
+    }</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The string type of the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">listener</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An object with a handleEvent method, or a function that will be called when
+the event is dispatched.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[scope]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The scope to execute the listener in. Defaults to the dispatcher/currentTarget for function listeners, and to the listener itself for object listeners (ie. using handleEvent).</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[once=false]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If true, the listener will remove itself after the first time it is triggered.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[data]</code>
+                        <span class="type"></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Arbitrary data that will be included as the second parameter when the listener is called.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[useCapture=false]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>For events that bubble, indicates whether to listen for the event in the capture or bubbling/target phase.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>:
+                    
+                    <p>Returns the anonymous function that was created and assigned as the listener. This is needed to remove the listener later using .removeEventListener.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_pause" class="method item">
+    <h3 class="name"><code>pause</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1111"><code>pause:1111</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Pause the instance. Paused audio will stop at the current time, and can be resumed using
+<a href="../classes/SoundInstance.html#method_resume" class="crosslink">resume</a>.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> myInstance.pause();</code></pre>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>If the pause call succeeds. This will return false if the sound isn&#39;t currently playing.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_play" class="method item">
+    <h3 class="name"><code>play</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code class="optional">[interrupt=&quot;none&quot;|options]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[delay=0]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[offset=0]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[loop=0]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[volume=1]</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[pan=0]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1048"><code>play:1048</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Play an instance. This method is intended to be called on SoundInstances that already exist (created
+with the Sound API <a href="../classes/Sound.html#method_createInstance" class="crosslink">createInstance</a> or <a href="../classes/Sound.html#method_play" class="crosslink">play</a>).</p>
+<p><h4>Example</h4>
+     var myInstance = createjs.Sound.createInstance(mySrc);
+     myInstance.play(createjs.Sound.INTERRUPT_ANY);
+     // alternatively, we can pass in options we want to set in an object
+     myInstance.play({offset:1, loop:2, pan:0.5});</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[interrupt=&quot;none&quot;|options]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>How to interrupt any currently playing instances of audio with the same source,
+if the maximum number of instances of the sound are already playing. Values are defined as <code>INTERRUPT_TYPE</code>
+constants on the Sound class, with the default defined by Sound/defaultInterruptBehavior.
+<br /><strong>OR</strong><br />
+This parameter can be an object that contains any or all optional properties by name, including: interrupt,
+delay, offset, loop, volume, and pan (see the above code sample).</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[delay=0]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The delay in milliseconds before the sound starts</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[offset=0]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>How far into the sound to begin playback, in milliseconds.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[loop=0]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The number of times to loop the audio. Use -1 for infinite loops.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[volume=1]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The volume of the sound, between 0 and 1.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[pan=0]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The pan of the sound between -1 (left) and 1 (right). Note that pan is not supported
+for HTML Audio.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeAllEventListeners" class="method item inherited">
+    <h3 class="name"><code>removeAllEventListeners</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code class="optional">[type]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_removeAllEventListeners">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l257"><code>removeAllEventListeners:257</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><p>Removes all listeners for the specified type, or all listeners of all types.</p></p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> // Remove all listeners
+ displayObject.removeAllEvenListeners();
+
+ // Remove all click listeners
+ displayObject.removeAllEventListeners("click");</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[type]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The string type of the event. If omitted, all listeners for all types will be removed.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeEventListener" class="method item inherited">
+    <h3 class="name"><code>removeEventListener</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>listener</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code class="optional">[useCapture]</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_removeEventListener">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l216"><code>removeEventListener:216</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><p>Removes the specified event listener.</p></p>
+<p><p><b>Important Note:</b> that you must pass the exact function reference used when the event was added. If a proxy
+function, or function closure is used as the callback, the proxy/closure reference must be used - a new proxy or
+closure will not work.</p></p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> displayObject.removeEventListener("click", handleClick);</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The string type of the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">listener</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The listener function or object.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name optional">[useCapture]</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>For events that bubble, indicates whether to listen for the event in the capture or bubbling/target phase.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_resume" class="method item">
+    <h3 class="name"><code>resume</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1141"><code>resume:1141</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Resume an instance that has been paused using <a href="../classes/SoundInstance.html#method_pause" class="crosslink">pause</a>. Audio that
+has not been paused will not playback when this method is called.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>myInstance.pause();
+// do some stuff
+myInstance.resume();</code></pre>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>If the resume call succeeds. This will return false if called on a sound that is not paused.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_sendEvent" class="method item protected">
+    <h3 class="name"><code>sendEvent</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l893"><code>sendEvent:893</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A helper method that dispatches all events for SoundInstance.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The event type</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_setMute" class="method item">
+    <h3 class="name"><code>setMute</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>value</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1237"><code>setMute:1237</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Mute and unmute the sound. Muted sounds will still play at 0 volume. Note that an unmuted sound may still be
+silent depending on <a href="../classes/Sound.html" class="crosslink">Sound</a> volume, instance volume, and Sound mute.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>myInstance.setMute(true);</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">value</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If the sound should be muted.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>If the mute call succeeds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_setPan" class="method item">
+    <h3 class="name"><code>setPan</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>value</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1275"><code>setPan:1275</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE that you can set pan directly, and getPan remains to allow support for IE8 with FlashPlugin.</p>
+<p>Set the left(-1)/right(+1) pan of the instance. Note that <a href="../classes/HTMLAudioPlugin.html" class="crosslink">HTMLAudioPlugin</a> does not
+support panning, and only simple left/right panning has been implemented for <a href="../classes/WebAudioPlugin.html" class="crosslink">WebAudioPlugin</a>.
+The default pan value is 0 (center).</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>myInstance.setPan(-1);  // to the left!</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">value</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The pan value, between -1 (left) and 1 (right).</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>:
+                    
+                    <p>If the setPan call succeeds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_setPosition" class="method item">
+    <h3 class="name"><code>setPosition</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>value</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1332"><code>setPosition:1332</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set the position of the playhead in the instance. This can be set while a sound is playing, paused, or even
+stopped.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> myInstance.setPosition(myInstance.getDuration()/2); // set audio to its halfway point.</code></pre>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">value</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The position to place the playhead, in milliseconds.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_setVolume" class="method item">
+    <h3 class="name"><code>setVolume</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>value</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1180"><code>setVolume:1180</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE that you can set volume directly, and setVolume remains to allow support for IE8 with FlashPlugin.
+Set the volume of the instance. You can retrieve the volume using <a href="../classes/SoundInstance.html#method_getVolume" class="crosslink">getVolume</a>.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code> myInstance.setVolume(0.5);</code></pre>
+<p>Note that the master volume set using the Sound API method <a href="../classes/Sound.html#method_setVolume" class="crosslink">setVolume</a>
+will be applied to the instance volume.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">value</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The volume to set, between 0 and 1.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>If the setVolume call succeeds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_stop" class="method item">
+    <h3 class="name"><code>stop</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1162"><code>stop:1162</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stop playback of the instance. Stopped sounds will reset their position to 0, and calls to <a href="../classes/SoundInstance.html#method_resume" class="crosslink">resume</a>
+will fail.  To start playback again, call <a href="../classes/SoundInstance.html#method_play" class="crosslink">play</a>.</p>
+<h4>Example</h4>
+
+<pre class="code prettyprint"><code>myInstance.stop();</code></pre>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>If the stop call succeeds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_toString" class="method item inherited">
+    <h3 class="name"><code>toString</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#method_toString">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l339"><code>toString:339</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
+                    
+                    <p>a string representation of the instance.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_updateVolume" class="method item protected">
+    <h3 class="name"><code>updateVolume</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l1200"><code>updateVolume:1200</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Internal function used to update the volume based on the instance volume, master volume, instance mute value,
+and master mute value.</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>:
+                    
+                    <p>if the volume was updated.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__captureListeners" class="property item protected inherited">
+    <h3 class="name"><code>_captureListeners</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#property__captureListeners">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l125"><code>_captureListeners:125</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__listeners" class="property item protected inherited">
+    <h3 class="name"><code>_listeners</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/EventDispatcher.html#property__listeners">EventDispatcher</a>:
+            
+        
+        
+        <a href="../files/.._src_createjs_events_EventDispatcher.js.html#l118"><code>_listeners:118</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_delay" class="property item protected">
+    <h3 class="name"><code>delay</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l592"><code>delay:592</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The time in milliseconds before the sound starts.
+Note this is handled by <a href="../classes/Sound.html" class="crosslink">Sound</a>.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_delayTimeoutId" class="property item protected">
+    <h3 class="name"><code>delayTimeoutId</code></h3>
+    <span class="type">TimeoutVariable</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l683"><code>delayTimeoutId:683</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>A Timeout created by <a href="../classes/Sound.html" class="crosslink">Sound</a> when this SoundInstance is played with a delay.
+This allows SoundInstance to remove the delay if stop or pause or cleanup are called before playback begins.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_gainNode" class="property item">
+    <h3 class="name"><code>gainNode</code></h3>
+    <span class="type">AudioGainNode</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l705"><code>gainNode:705</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE this only exists as a <a href="../classes/WebAudioPlugin.html" class="crosslink">WebAudioPlugin</a> property and is only intended for use by advanced users.
+GainNode for controlling <code>SoundInstance</code> volume. Connected to the WebAudioPlugin <a href="../classes/WebAudioPlugin.html#property_gainNode" class="crosslink">gainNode</a>
+that sequences to <code>context.destination</code>.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_muted" class="property item protected">
+    <h3 class="name"><code>muted</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l751"><code>muted:751</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Determines if the audio is currently muted.
+Use <a href="../classes/SoundInstance.html#method_getMute" class="crosslink">getMute</a> and <a href="../classes/SoundInstance.html#method_setMute" class="crosslink">setMute</a> to access.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> false</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_offset" class="property item protected">
+    <h3 class="name"><code>offset</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l581"><code>offset:581</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>How far into the sound to begin playback in milliseconds. This is passed in when play is called and used by
+pause and setPosition to track where the sound should be at.
+Note this is converted from milliseconds to seconds for consistency with the WebAudio API.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_onComplete" class="property item deprecated">
+    <h3 class="name"><code>onComplete</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+    
+        <span class="flag deprecated" title="Use addEventListener and the &quot;complete&quot; event.">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l878"><code>onComplete:878</code></a>
+        
+        </p>
+
+        
+            <p>Deprecated: Use addEventListener and the &quot;complete&quot; event.</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>REMOVED. Use <a href="../classes/EventDispatcher.html#method_addEventListener" class="crosslink">addEventListener</a> and the <a href="../classes/SoundInstance.html#event_complete" class="crosslink">complete</a>
+event.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_onLoop" class="property item deprecated">
+    <h3 class="name"><code>onLoop</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+    
+        <span class="flag deprecated" title="Use addEventListener and the &quot;loop&quot; event.">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l885"><code>onLoop:885</code></a>
+        
+        </p>
+
+        
+            <p>Deprecated: Use addEventListener and the &quot;loop&quot; event.</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>REMOVED. Use <a href="../classes/EventDispatcher.html#method_addEventListener" class="crosslink">addEventListener</a> and the <a href="../classes/SoundInstance.html#event_loop" class="crosslink">loop</a>
+event.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_onPlayFailed" class="property item deprecated">
+    <h3 class="name"><code>onPlayFailed</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+    
+        <span class="flag deprecated" title="Use addEventListener and the &quot;failed&quot; event.">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l871"><code>onPlayFailed:871</code></a>
+        
+        </p>
+
+        
+            <p>Deprecated: Use addEventListener and the &quot;failed&quot; event.</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>REMOVED. Use <a href="../classes/EventDispatcher.html#method_addEventListener" class="crosslink">addEventListener</a> and the <a href="../classes/SoundInstance.html#event_failed" class="crosslink">failed</a>
+event.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_onPlayInterrupted" class="property item deprecated">
+    <h3 class="name"><code>onPlayInterrupted</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+    
+        <span class="flag deprecated" title="Use addEventListener and the &quot;interrupted&quot; event.">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l864"><code>onPlayInterrupted:864</code></a>
+        
+        </p>
+
+        
+            <p>Deprecated: Use addEventListener and the &quot;interrupted&quot; event.</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>REMOVED. Use <a href="../classes/EventDispatcher.html#method_addEventListener" class="crosslink">addEventListener</a> and the <a href="../classes/SoundInstance.html#event_interrupted" class="crosslink">interrupted</a>
+event.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_onPlaySucceeded" class="property item deprecated">
+    <h3 class="name"><code>onPlaySucceeded</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+    
+        <span class="flag deprecated" title="Use addEventListener and the &quot;succeeded&quot; event.">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l857"><code>onPlaySucceeded:857</code></a>
+        
+        </p>
+
+        
+            <p>Deprecated: Use addEventListener and the &quot;succeeded&quot; event.</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>REMOVED. Use <a href="../classes/EventDispatcher.html#method_addEventListener" class="crosslink">addEventListener</a> and the <a href="../classes/SoundInstance.html#event_succeeded" class="crosslink">succeeded</a>
+event.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_onReady" class="property item deprecated">
+    <h3 class="name"><code>onReady</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+
+    
+        <span class="flag deprecated" title="Use addEventListener and the &quot;ready&quot; event.">deprecated</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l850"><code>onReady:850</code></a>
+        
+        </p>
+
+        
+            <p>Deprecated: Use addEventListener and the &quot;ready&quot; event.</p>
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>REMOVED. Use <a href="../classes/EventDispatcher.html#method_addEventListener" class="crosslink">addEventListener</a> and the <a href="../classes/SoundInstance.html#event_ready" class="crosslink">ready</a>
+event.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_owner" class="property item protected">
+    <h3 class="name"><code>owner</code></h3>
+    <span class="type"><a href="../classes/WebAudioPlugin.html" class="crosslink">WebAudioPlugin</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l572"><code>owner:572</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The plugin that created the instance</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_pan" class="property item">
+    <h3 class="name"><code>pan</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l633"><code>pan:633</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The pan of the sound, between -1 (left) and 1 (right). Note that pan does not work for HTML Audio.
+Note this uses a getter setter, which is not supported by Firefox versions 3.6 or lower, Opera versions 11.50 or lower,
+and Internet Explorer 8 or lower.  Instead use <a href="../classes/SoundInstance.html#method_setPan" class="crosslink">setPan</a> and <a href="../classes/SoundInstance.html#method_getPan" class="crosslink">getPan</a>.
+Note in WebAudioPlugin this only gives us the "x" value of what is actually 3D audio.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_pan" class="property item protected">
+    <h3 class="name"><code>pan</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l664"><code>pan:664</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The length of the audio clip, in milliseconds.
+Use <a href="../classes/SoundInstance.html#method_getDuration" class="crosslink">getDuration</a> to access.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_panNode" class="property item">
+    <h3 class="name"><code>panNode</code></h3>
+    <span class="type">AudioPannerNode</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l717"><code>panNode:717</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE this only exists as a <a href="../classes/WebAudioPlugin.html" class="crosslink">WebAudioPlugin</a> property and is only intended for use by advanced users.
+A panNode allowing left and right audio channel panning only. Connected to SoundInstance <a href="../classes/SoundInstance.html#property_gainNode" class="crosslink">gainNode</a>.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_paused" class="property item protected">
+    <h3 class="name"><code>paused</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l761"><code>paused:761</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Determines if the audio is currently paused.
+Use <a href="../classes/SoundInstance.html#method_pause" class="crosslink">pause</a> and <a href="../classes/SoundInstance.html#method_resume" class="crosslink">resume</a> to set.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> false</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_playState" class="property item">
+    <h3 class="name"><code>playState</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l564"><code>playState:564</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The play state of the sound. Play states are defined as constants on <a href="../classes/Sound.html" class="crosslink">Sound</a>.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_remainingLoops" class="property item protected">
+    <h3 class="name"><code>remainingLoops</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l674"><code>remainingLoops:674</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The number of play loops remaining. Negative values will loop infinitely.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_soundCompleteTimeout" class="property item protected">
+    <h3 class="name"><code>soundCompleteTimeout</code></h3>
+    <span class="type">TimeoutVariable</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l694"><code>soundCompleteTimeout:694</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Timeout that is created internally to handle sound playing to completion. Stored so we can remove it when
+stop, pause, or cleanup are called</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_sourceNode" class="property item">
+    <h3 class="name"><code>sourceNode</code></h3>
+    <span class="type">AudioNode</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l727"><code>sourceNode:727</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE this only exists as a <a href="../classes/WebAudioPlugin.html" class="crosslink">WebAudioPlugin</a> property and is only intended for use by advanced users.
+sourceNode is the audio source. Connected to <a href="../classes/SoundInstance.html#property_gainNode" class="crosslink">gainNode</a>.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_sourceNodeNext" class="property item protected">
+    <h3 class="name"><code>sourceNodeNext</code></h3>
+    <span class="type">AudioNode</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l738"><code>sourceNodeNext:738</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.1</p>
+        
+    </div>
+
+    <div class="description">
+        <p>NOTE this only exists as a <a href="../classes/WebAudioPlugin.html" class="crosslink">WebAudioPlugin</a> property and is only intended for use by advanced users.
+sourceNodeNext is the audio source for the next loop, inserted in a look ahead approach to allow for smooth
+looping. Connected to <a href="../classes/SoundInstance.html#property_gainNode" class="crosslink">gainNode</a>.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_src" class="property item protected">
+    <h3 class="name"><code>src</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l547"><code>src:547</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The source of the sound.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_startTime" class="property item protected">
+    <h3 class="name"><code>startTime</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l771"><code>startTime:771</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>WebAudioPlugin only.
+Time audio started playback, in seconds. Used to handle set position, get position, and resuming from paused.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_uniqueId" class="property item">
+    <h3 class="name"><code>uniqueId</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a> | <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l556"><code>uniqueId:556</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The unique ID of the instance. This is set by <a href="../classes/Sound.html" class="crosslink">Sound</a>.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> -1</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_volume" class="property item">
+    <h3 class="name"><code>volume</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l603"><code>volume:603</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The volume of the sound, between 0 and 1.
+Note this uses a getter setter, which is not supported by Firefox versions 3.6 or lower and Opera versions 11.50 or lower,
+and Internet Explorer 8 or lower.  Instead use <a href="../classes/SoundInstance.html#method_setVolume" class="crosslink">setVolume</a> and <a href="../classes/SoundInstance.html#method_getVolume" class="crosslink">getVolume</a>.</p>
+<p>The actual output volume of a sound can be calculated using:
+<code>myInstance.volume * createjs.Sound.getVolume();</code></p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 1</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                
+                    <div id="event_complete" class="events item">
+    <h3 class="name"><code>complete</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l840"><code>complete:840</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>The event that is fired when playback completes. This means that the sound has finished playing in its
+entirety, including its loop iterations.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">target</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The object that dispatched the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The event type.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_failed" class="events item">
+    <h3 class="name"><code>failed</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l822"><code>failed:822</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>The event that is fired when playback has failed. This happens when there are too many channels with the same
+src property already playing (and the interrupt value doesn&#39;t cause an interrupt of another instance), or
+the sound could not be played, perhaps due to a 404 error.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">target</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The object that dispatched the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The event type.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_interrupted" class="events item">
+    <h3 class="name"><code>interrupted</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l813"><code>interrupted:813</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>The event that is fired when playback is interrupted. This happens when another sound with the same
+src property is played using an interrupt value that causes this instance to stop playing.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">target</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The object that dispatched the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The event type.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_loop" class="events item">
+    <h3 class="name"><code>loop</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l832"><code>loop:832</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>The event that is fired when a sound has completed playing but has loops remaining.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">target</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The object that dispatched the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The event type.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_ready" class="events item">
+    <h3 class="name"><code>ready</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l797"><code>ready:797</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>The event that is fired when a sound is ready to play.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">target</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The object that dispatched the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The event type.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_succeeded" class="events item">
+    <h3 class="name"><code>succeeded</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/.._src_soundjs_WebAudioPlugin.js.html#l805"><code>succeeded:805</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 0.4.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>The event that is fired when playback has started successfully.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">target</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The object that dispatched the event.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The event type.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+            </div>
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

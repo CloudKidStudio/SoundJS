@@ -60,7 +60,7 @@ this.createjs = this.createjs || {};
  *          // This is fired for each sound that is registered.
  *          var instance = createjs.Sound.play("sound");  // play using id.  Could also use full sourcepath or event.src.
  *          instance.addEventListener("complete", createjs.proxy(this.handleComplete, this));
- *          instance.setVolume(0.5);
+ *          instance.volume = 0.5;
  *      }
  *
  * <h4>Browser Support</h4>
@@ -72,6 +72,8 @@ this.createjs = this.createjs || {};
  */
 
 (function () {
+
+	"use strict";
 
 	//TODO: Interface to validate plugins and throw warnings
 	//TODO: Determine if methods exist on a plugin before calling  // OJR this is only an issue if something breaks or user changes something
@@ -111,7 +113,7 @@ this.createjs = this.createjs || {};
      *          // This is fired for each sound that is registered.
      *          var instance = createjs.Sound.play("sound");  // play using id.  Could also use full source path or event.src.
      *          instance.addEventListener("complete", createjs.proxy(this.handleComplete, this));
-     *          instance.setVolume(0.5);
+     *          instance.volume = 0.5;
 	 *      }
 	 *
 	 * The maximum number of concurrently playing instances of the same sound can be specified in the "data" argument
@@ -153,6 +155,11 @@ this.createjs = this.createjs || {};
 	 * <li>There is a limit to how many audio tags you can load and play at once, which appears to be determined by
 	 * hardware and browser settings.  See {{#crossLink "HTMLAudioPlugin.MAX_INSTANCES"}}{{/crossLink}} for a safe estimate.</li></ul>
 	 *
+	 * <b>Firefox 25 Web Audio limitations</b>
+	 * <ul><li>mp3 audio files do not load properly on all windows machines, reported
+	 * <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=929969" target="_blank">here</a>. </br>
+	 * For this reason it is recommended to pass ogg file first until this bug is resolved, if possible.</li></ul>
+
 	 * <b>Safari limitations</b><br />
 	 * <ul><li>Safari requires Quicktime to be installed for audio playback.</li></ul>
 	 *
@@ -170,14 +177,6 @@ this.createjs = this.createjs || {};
 	 * <li>We can only play audio inside a user event (touch/click).  This currently means you cannot loop sound or use
 	 * a delay.</li></ul>
 	 *
- 	 * <b>Android Chrome 26.0.1410.58 specific limitations</b><br />
-	 * <ul><li>Chrome reports true when you run createjs.Sound.BrowserDetect.isChrome, but is a different browser
-	 * with different abilities.</li>
-	 * <li>Can only play 1 sound at a time.</li>
-	 * <li>Sound is not cached.</li>
-	 * <li>Sound can only be loaded in a user initiated touch/click event.</li>
-	 * <li>There is a delay before a sound is played, presumably while the src is loaded.</li>
-	 * </ul>
 	 *
 	 * @class Sound
 	 * @static
@@ -335,7 +334,7 @@ this.createjs = this.createjs || {};
 
 	/**
 	 * Determines the default behavior for interrupting other currently playing instances with the same source, if the
-	 * maximum number of instances of the sound are already playing.  Currently the default is <code>Sound.INTERRUPT_NONE</code>
+	 * maximum number of instances of the sound are already playing.  Currently the default is {{#crossLink "Sound/INTERRUPT_NONE:property"}}{{/crossLink}}
 	 * but this can be set and will change playback behavior accordingly.  This is only used when {{#crossLink "Sound/play"}}{{/crossLink}}
 	 * is called without passing a value for interrupt.
 	 * @property defaultInterruptBehavior
@@ -458,13 +457,6 @@ this.createjs = this.createjs || {};
 
 // Events
 	/**
-	 * This event is fired when a file finishes loading internally. <b>Please use the "fileload" event instead.</b>
-	 * @event loadComplete
-	 * @deprecated In favor of the "fileload" event.
-	 * @since 0.4.0
-	 */
-
-	/**
 	 * This event is fired when a file finishes loading internally. This event is fired for each loaded sound,
 	 * so any handler methods should look up the <code>event.src</code> to handle a particular sound.
 	 * @event fileload
@@ -477,15 +469,15 @@ this.createjs = this.createjs || {};
 	 * @since 0.4.1
 	 */
 
-// Callbacks
+	//TODO: Deprecated
 	/**
-	 * The callback that is fired when a file finishes loading internally.  This is fired for each loaded sound.
+	 * REMOVED. Use {{#crossLink "EventDispatcher/addEventListener"}}{{/crossLink}} and the {{#crossLink "Sound/fileload:event"}}{{/crossLink}}
+	 * event.
 	 * @property onLoadComplete
 	 * @type {Function}
-	 * @deprecated In favour of the "fileload" event. Will be removed in a future version.
+	 * @deprecated Use addEventListener and the fileload event.
 	 * @since 0.4.0
 	 */
-	s.onLoadComplete = null;
 
 	/**
 	 * Used by external plugins to dispatch file load events.
@@ -502,25 +494,15 @@ this.createjs = this.createjs || {};
 		}
 		for (var i = 0, l = s.preloadHash[src].length; i < l; i++) {
 			var item = s.preloadHash[src][i];
-			var event = {
-				target:this,
-				type:"fileload",
-				src:item.src,
-				id:item.id,
-				data:item.data
-			};
 			s.preloadHash[src][i] = true;
-			s.dispatchEvent(event);
 
-			// We still dispatch the deprecated events.
-			s.onLoadComplete && s.onLoadComplete(event); // Uses the "fileload" event type.
-			event = { // Use a new object to avoid references getting messed up.
-				target:this,
-				type:"loadComplete",
-				src:item.src,
-				id:item.id,
-				data:item.data
-			}
+			if (!s.hasEventListener("fileload")) { continue; }
+
+			var event = new createjs.Event("fileload");
+			event.src = item.src,
+			event.id = item.id,
+			event.data = item.data
+
 			s.dispatchEvent(event);
 		}
 	}
@@ -734,8 +716,9 @@ this.createjs = this.createjs || {};
 	 * @param {Boolean} [preload=true] If the sound should be internally preloaded so that it can be played back
 	 * without an external preloader.
 	 * @param {string} basePath Set a path that will be prepending to src for loading.
-	 * @return {Object} An object with the modified values that were passed in, which defines the sound. Returns false
-	 * if the source cannot be parsed.
+	 * @return {Object} An object with the modified values that were passed in, which defines the sound.
+	 * Returns false if the source cannot be parsed or no plugins can be initialized.
+	 * Returns true if the source is already loaded.
 	 * @static
 	 * @since 0.4.0
 	 */
@@ -743,7 +726,6 @@ this.createjs = this.createjs || {};
 		if (!s.initializeDefaultPlugins()) {
 			return false;
 		}
-
 
 		if (src instanceof Object) {
 			basePath = id;	//this assumes preload will not be passed in as a property // OJR check if arguments == 3
@@ -762,7 +744,7 @@ this.createjs = this.createjs || {};
 			s.idHash[id] = details.src;
 		}
 
-		var numChannels = null; // null will set all SoundChannel to set this to it's internal maxDefault
+		var numChannels = null; // null tells SoundChannel to set this to it's internal maxDefault
 		if (data != null) {
 			if (!isNaN(data.channels)) {
 				numChannels = parseInt(data.channels);
@@ -807,10 +789,13 @@ this.createjs = this.createjs || {};
 			}  // we do this so we can store multiple id's and data if needed
 			s.preloadHash[details.src].push({src:src, id:id, data:data});  // keep this data so we can return it in fileload event
 			if (s.preloadHash[details.src].length == 1) {
+				// if already loaded once, don't load a second time  // OJR note this will disallow reloading a sound if loading fails or the source changes
 				if (basePath == null) {basePath = "";}
 				s.activePlugin.preload(details.src, loader, basePath);
+			} else {
+				// if src already loaded successfully, return true
+				if (s.preloadHash[details.src][0] == true) {return true;}
 			}
-			// if already loaded once, don't load a second time  // OJR note this will disallow reloading a sound if loading fails or the source changes
 		}
 
 		return details;
@@ -835,8 +820,9 @@ this.createjs = this.createjs || {};
 	 * {{#crossLink "Sound/registerSound"}}{{/crossLink}}: <code>{src:srcURI, id:ID, data:Data, preload:UseInternalPreloader}</code>
 	 * with "id", "data", and "preload" being optional.
 	 * @param {string} basePath Set a path that will be prepending to each src when loading.
-	 * @return {Object} An array of objects with the modified values that were passed in, which defines each sound. It
-	 * will return false for any values that the source cannot be parsed.
+	 * @return {Object} An array of objects with the modified values that were passed in, which defines each sound.
+	 * Like registerSound, it will return false for any values that the source cannot be parsed or if no plugins can be initialized.
+	 * Also, it will returns true for any values that the source is already loaded.
 	 * @static
 	 * @since 0.4.0
 	 */
@@ -954,7 +940,7 @@ this.createjs = this.createjs || {};
 	 * <h4>Example</h4>
 	 *     var mySound = "assetPath/asset0.mp3|assetPath/asset0.ogg";
 	 *     if(createjs.Sound.loadComplete(mySound) {
-	 *     	createjs.Sound.play(mySound);
+	 *         createjs.Sound.play(mySound);
 	 *     }
 	 *
 	 * @method loadComplete
@@ -974,7 +960,7 @@ this.createjs = this.createjs || {};
 
 	/**
 	 * Parse the path of a sound, usually from a manifest item. Manifest items support single file paths, as well as
-	 * composite paths using <code>Sound.DELIMITER</code>, which defaults to "|". The first path supported by the
+	 * composite paths using {{#crossLink "Sound/DELIMITER:property"}}{{/crossLink}}, which defaults to "|". The first path supported by the
 	 * current browser/plugin will be used.
 	 * @method parsePath
 	 * @param {String} value The path to an audio source.
@@ -982,8 +968,8 @@ this.createjs = this.createjs || {};
 	 * @param {String} [id] The user-specified sound ID. This may be null, in which case the src will be used instead.
 	 * @param {Number | String | Boolean | Object} [data] Arbitrary data appended to the sound, usually denoting the
 	 * number of channels for the sound. This method doesn't currently do anything with the data property.
-	 * @return {Object} A formatted object that can be registered with the <code>Sound.activePlugin</code> and returned
-	 * to a preloader like <a href="http://preloadjs.com" target="_blank">PreloadJS</a>.
+	 * @return {Object} A formatted object that can be registered with the {{#crossLink "Sound/activePlugin:property"}}{{/crossLink}}
+	 * and returned to a preloader like <a href="http://preloadjs.com" target="_blank">PreloadJS</a>.
 	 * @protected
 	 */
 	s.parsePath = function (value, type, id, data) {
@@ -1001,7 +987,7 @@ this.createjs = this.createjs || {};
 			var name = match[4];
 			var ext = match[5];
 
-			if (c[ext] && s.SUPPORTED_EXTENSIONS.indexOf(ext) > -1) {
+			if (c[ext] && createjs.indexOf(s.SUPPORTED_EXTENSIONS, ext) > -1) {
 				ret.name = name;
 				ret.src = sound;
 				ret.extension = ext;
@@ -1017,11 +1003,11 @@ this.createjs = this.createjs || {};
 	 --------------- */
 	/**
 	 * Play a sound and get a {{#crossLink "SoundInstance"}}{{/crossLink}} to control. If the sound fails to play, a
-	 * SoundInstance will still be returned, and have a playState of <code>Sound.PLAY_FAILED</code>. Note that even on
-	 * sounds with failed playback, you may still be able to call SoundInstance {{#crossLink "SoundInstance/play"}}{{/crossLink}},
+	 * SoundInstance will still be returned, and have a playState of {{#crossLink "Sound/PLAY_FAILED:property"}}{{/crossLink}}.
+	 * Note that even on sounds with failed playback, you may still be able to call SoundInstance {{#crossLink "SoundInstance/play"}}{{/crossLink}},
 	 * since the failure could be due to lack of available channels. If the src does not have a supported extension or
-	 * if there is no available plugin,<code>Sound.defaultSoundInstance</code> will be returned, which will not play any
-	 * audio, but will not generate errors.
+	 * if there is no available plugin, {{#crossLink "Sound/defaultSoundInstance:property"}}{{/crossLink}} will be
+	 * returned, which will not play any audio, but will not generate errors.
 	 *
 	 * <h4>Example</h4>
 	 *      createjs.Sound.addEventListener("fileload", handleLoad);
@@ -1030,13 +1016,18 @@ this.createjs = this.createjs || {};
 	 *      	createjs.Sound.play("myID");
 	 *      	// alternately we could call the following
 	 *      	var myInstance = createjs.Sound.play("myAudioPath/mySound.mp3", createjs.Sound.INTERRUPT_ANY, 0, 0, -1, 1, 0);
+	 *      	// another alternative is to pass in just the options we want to set inside of an object
+	 *      	var myInstance = createjs.Sound.play("myAudioPath/mySound.mp3", {interrupt: createjs.Sound.INTERRUPT_ANY, loop:-1});
 	 *      }
 	 *
 	 * @method play
 	 * @param {String} src The src or ID of the audio.
-	 * @param {String} [interrupt="none"] How to interrupt any currently playing instances of audio with the same source,
+	 * @param {String | Object} [interrupt="none"|options] How to interrupt any currently playing instances of audio with the same source,
 	 * if the maximum number of instances of the sound are already playing. Values are defined as <code>INTERRUPT_TYPE</code>
-	 * constants on the Sound class, with the default defined by {{#crossLink "Sound/defaultInterruptBehavior"}}{{/crossLink}}.
+	 * constants on the Sound class, with the default defined by {{#crossLink "Sound/defaultInterruptBehavior:property"}}{{/crossLink}}.
+	 * <br /><strong>OR</strong><br />
+	 * This parameter can be an object that contains any or all optional properties by name, including: interrupt,
+	 * delay, offset, loop, volume, and pan (see the above code sample).
 	 * @param {Number} [delay=0] The amount of time to delay the start of audio playback, in milliseconds.
 	 * @param {Number} [offset=0] The offset from the start of the audio to begin playback, in milliseconds.
 	 * @param {Number} [loop=0] How many times the audio loops when it reaches the end of playback. The default is 0 (no
@@ -1059,8 +1050,8 @@ this.createjs = this.createjs || {};
 
 	/**
 	 * Creates a {{#crossLink "SoundInstance"}}{{/crossLink}} using the passed in src. If the src does not have a
-	 * supported extension or if there is no available plugin, a <code>Sound.defaultSoundInstance</code> will be returned
-	 * that can be called safely but does nothing.
+	 * supported extension or if there is no available plugin, a {{#crossLink "Sound/defaultSoundInstance:property"}}{{/crossLink}}
+	 * will be returned that can be called safely but does nothing.
 	 *
 	 * <h4>Example</h4>
 	 *      var myInstance = null;
@@ -1131,7 +1122,7 @@ this.createjs = this.createjs || {};
 
 	/**
 	 * Get the master volume of Sound. The master volume is multiplied against each sound's individual volume.
-	 * To get individual sound volume, use SoundInstance {{#crossLink "SoundInstance/getVolume"}}{{/crossLink}} instead.
+	 * To get individual sound volume, use SoundInstance {{#crossLink "SoundInstance/volume"}}{{/crossLink}} instead.
 	 *
 	 * <h4>Example</h4>
 	 *     var masterVolume = createjs.Sound.getVolume();
@@ -1145,21 +1136,12 @@ this.createjs = this.createjs || {};
 	}
 
 	/**
-	 * Mute/Unmute all audio. Please see {{#crossLink "Sound/setMute"}}{{/crossLink}}.
+	 * REMOVED. Please see {{#crossLink "Sound/setMute"}}{{/crossLink}}.
 	 * @method mute
 	 * @param {Boolean} value Whether the audio should be muted or not.
 	 * @static
 	 * @deprecated This function has been deprecated. Please use setMute instead.
 	 */
-	s.mute = function (value) {
-		this.masterMute = value;
-		if (!this.activePlugin || !this.activePlugin.setMute || !this.activePlugin.setMute(value)) {
-			var instances = this.instances;
-			for (var i = 0, l = instances.length; i < l; i++) {
-				instances[i].setMasterMute(value);
-			}
-		}
-	}
 
 	/**
 	 * Mute/Unmute all audio. Note that muted audio still plays at 0 volume. This global mute value is maintained
@@ -1263,8 +1245,12 @@ this.createjs = this.createjs || {};
 	 * control delays.
 	 * @method playInstance
 	 * @param {SoundInstance} instance The {{#crossLink "SoundInstance"}}{{/crossLink}} to start playing.
-	 * @param {String} [interrupt=none] How this sound interrupts other instances with the same source.  Defaults to
-	 * <code>Sound.INTERRUPT_NONE</code>. All interrupt values are defined as <code>INTERRUPT_TYPE</code>constants on Sound.
+	 * @param {String | Object} [interrupt="none"|options] How to interrupt any currently playing instances of audio with the same source,
+	 * if the maximum number of instances of the sound are already playing. Values are defined as <code>INTERRUPT_TYPE</code>
+	 * constants on the Sound class, with the default defined by {{#crossLink "Sound/defaultInterruptBehavior"}}{{/crossLink}}.
+	 * <br /><strong>OR</strong><br />
+	 * This parameter can be an object that contains any or all optional properties by name, including: interrupt,
+	 * delay, offset, loop, volume, and pan (see the above code sample).
 	 * @param {Number} [delay=0] Time in milliseconds before playback begins.
 	 * @param {Number} [offset=instance.offset] Time into the sound to begin playback in milliseconds.  Defaults to the
 	 * current value on the instance.
@@ -1277,22 +1263,20 @@ this.createjs = this.createjs || {};
 	 * @static
 	 */
 	s.playInstance = function (instance, interrupt, delay, offset, loop, volume, pan) {
+		if (interrupt instanceof Object) {
+			delay = interrupt.delay;
+			offset = interrupt.offset;
+			loop = interrupt.loop;
+			volume = interrupt.volume;
+			pan = interrupt.pan;
+		}
+
 		interrupt = interrupt || s.defaultInterruptBehavior;
-		if (delay == null) {
-			delay = 0;
-		}
-		if (offset == null) {
-			offset = instance.getPosition();
-		}
-		if (loop == null) {
-			loop = 0;
-		}
-		if (volume == null) {
-			volume = instance.getVolume();
-		}
-		if (pan == null) {
-			pan = instance.getPan();
-		}
+		if (delay == null) {delay = 0;}
+		if (offset == null) {offset = instance.getPosition();}
+		if (loop == null) {loop = 0;}
+		if (volume == null) {volume = instance.volume;}
+		if (pan == null) {pan = instance.pan;}
 
 		if (delay == 0) {
 			var ok = s.beginPlaying(instance, interrupt, offset, loop, volume, pan);
@@ -1318,7 +1302,8 @@ this.createjs = this.createjs || {};
 	 * @method beginPlaying
 	 * @param {SoundInstance} instance A {{#crossLink "SoundInstance"}}{{/crossLink}} to begin playback.
 	 * @param {String} [interrupt=none] How this sound interrupts other instances with the same source. Defaults to
-	 * <code>Sound.INTERRUPT_NONE</code>. Interrupts are defined as <code>INTERRUPT_TYPE</code> constants on Sound.
+	 * {{#crossLink "Sound/INTERRUPT_NONE:property"}}{{/crossLink}}. Interrupts are defined as <code>INTERRUPT_TYPE</code>
+	 * constants on Sound.
 	 * @param {Number} [offset] Time in milliseconds into the sound to begin playback.  Defaults to the current value on
 	 * the instance.
 	 * @param {Number} [loop=0] The number of times to loop the audio. Use 0 for no loops, and -1 for an infinite loop.
@@ -1336,7 +1321,7 @@ this.createjs = this.createjs || {};
 		var result = instance.beginPlaying(offset, loop, volume, pan);
 		if (!result) {
 			//LM: Should we remove this from the SoundChannel (see finishedPlaying)
-			var index = this.instances.indexOf(instance);
+			var index = createjs.indexOf(this.instances, instance);
 			if (index > -1) {
 				this.instances.splice(index, 1);
 			}
@@ -1372,16 +1357,14 @@ this.createjs = this.createjs || {};
 	 */
 	s.playFinished = function (instance) {
 		SoundChannel.remove(instance);
-		var index = this.instances.indexOf(instance);
+		var index = createjs.indexOf(this.instances, instance);
 		if (index > -1) {
 			this.instances.splice(index, 1);
 		}
 	}
 
 	/**
-	 * A function proxy for Sound methods. By default, JavaScript methods do not maintain scope, so passing a
-	 * method as a callback will result in the method getting called in the scope of the caller. Using a proxy
-	 * ensures that the method gets called in the correct scope.
+	 * REMOVED.  Please use createjs.proxy instead
 	 * @method proxy
 	 * @param {Function} method The function to call
 	 * @param {Object} scope The scope to call the method name on
@@ -1389,37 +1372,8 @@ this.createjs = this.createjs || {};
 	 * @static
 	 * @deprecated Deprecated in favor of createjs.proxy.
 	 */
-	s.proxy = function (method, scope) {
-		return function () {
-			return method.apply(scope, arguments);
-		}
-	}
 
 	createjs.Sound = Sound;
-
-	/**
-	 * A function proxy for Sound methods. By default, JavaScript methods do not maintain scope, so passing a
-	 * method as a callback will result in the method getting called in the scope of the caller. Using a proxy
-	 * ensures that the method gets called in the correct scope.
-	 * Note arguments can be passed that will be applied to the function when it is called.
-	 *
-	 * <h4>Example<h4>
-	 *     myObject.myCallback = createjs.proxy(myHandler, this, arg1, arg2);
-	 *
-	 * #method proxy
-	 * @param {Function} method The function to call
-	 * @param {Object} scope The scope to call the method name on
-	 * @param {mixed} [arg] * Arguments that are appended to the callback for additional params.
-	 * @protected
-	 * @static
-	 */
-	createjs.proxy = function (method, scope) {
-		var aArgs = Array.prototype.slice.call(arguments, 2);
-		return function () {
-			return method.apply(scope, Array.prototype.slice.call(arguments, 0).concat(aArgs));
-		};
-	}
-
 
 	/**
 	 * An internal class that manages the number of active {{#crossLink "SoundInstance"}}{{/crossLink}} instances for
@@ -1544,161 +1498,159 @@ this.createjs = this.createjs || {};
 		return SoundChannel.channels[src];
 	}
 
-	var p = SoundChannel.prototype = {
+	var p = SoundChannel.prototype;
 
-		/**
-		 * The source of the channel.
-		 * #property src
-		 * @type {String}
-		 */
-		src:null,
+	/**
+	 * The source of the channel.
+	 * #property src
+	 * @type {String}
+	 */
+	p.src = null;
 
-		/**
-		 * The maximum number of instances in this channel.  -1 indicates no limit
-		 * #property max
-		 * @type {Number}
-		 */
-		max:null,
+	/**
+	 * The maximum number of instances in this channel.  -1 indicates no limit
+	 * #property max
+	 * @type {Number}
+	 */
+	p.max = null;
 
-		/**
-		 * The default value to set for max, if it isn't passed in.  Also used if -1 is passed.
-		 * #property maxDefault
-		 * @type {Number}
-		 * @default 100
-		 * @since 0.4.0
-		 */
-		maxDefault:100,
+	/**
+	 * The default value to set for max, if it isn't passed in.  Also used if -1 is passed.
+	 * #property maxDefault
+	 * @type {Number}
+	 * @default 100
+	 * @since 0.4.0
+	 */
+	p.maxDefault = 100;
 
-		/**
-		 * The current number of active instances.
-		 * #property length
-		 * @type {Number}
-		 */
-		length:0,
+	/**
+	 * The current number of active instances.
+	 * #property length
+	 * @type {Number}
+	 */
+	p.length = 0;
 
-		/**
-		 * Initialize the channel.
-		 * #method init
-		 * @param {String} src The source of the channel
-		 * @param {Number} max The maximum number of instances in the channel
-		 * @protected
-		 */
-		init:function (src, max) {
-			this.src = src;
-			this.max = max || this.maxDefault;
-			if (this.max == -1) {
-				this.max == this.maxDefault;
-			}
-			this.instances = [];
-		},
+	/**
+	 * Initialize the channel.
+	 * #method init
+	 * @param {String} src The source of the channel
+	 * @param {Number} max The maximum number of instances in the channel
+	 * @protected
+	 */
+	p.init = function (src, max) {
+		this.src = src;
+		this.max = max || this.maxDefault;
+		if (this.max == -1) {
+			this.max == this.maxDefault;
+		}
+		this.instances = [];
+	};
 
-		/**
-		 * Get an instance by index.
-		 * #method get
-		 * @param {Number} index The index to return.
-		 * @return {SoundInstance} The SoundInstance at a specific instance.
-		 */
-		get:function (index) {
-			return this.instances[index];
-		},
+	/**
+	 * Get an instance by index.
+	 * #method get
+	 * @param {Number} index The index to return.
+	 * @return {SoundInstance} The SoundInstance at a specific instance.
+	 */
+	p.get = function (index) {
+		return this.instances[index];
+	};
 
-		/**
-		 * Add a new instance to the channel.
-		 * #method add
-		 * @param {SoundInstance} instance The instance to add.
-		 * @return {Boolean} The success of the method call. If the channel is full, it will return false.
-		 */
-		add:function (instance, interrupt) {
-			if (!this.getSlot(interrupt, instance)) {
-				return false;
-			}
-			this.instances.push(instance);
-			this.length++;
-			return true;
-		},
-
-		/**
-		 * Remove an instance from the channel, either when it has finished playing, or it has been interrupted.
-		 * #method remove
-		 * @param {SoundInstance} instance The instance to remove
-		 * @return {Boolean} The success of the remove call. If the instance is not found in this channel, it will
-		 * return false.
-		 */
-		remove:function (instance) {
-			var index = this.instances.indexOf(instance);
-			if (index == -1) {
-				return false;
-			}
-			this.instances.splice(index, 1);
-			this.length--;
-			return true;
-		},
-
-		/**
-		 * Stop playback and remove all instances from the channel.  Usually in response to a delete call.
-		 * #method removeAll
-		 */
-		removeAll:function () {
-			// Note that stop() removes the item from the list, but we don't want to assume that.
-			for (var i=this.length-1; i>=0; i--) {
-				this.instances[i].stop();
-			}
-		},
-
-		/**
-		 * Get an available slot depending on interrupt value and if slots are available.
-		 * #method getSlot
-		 * @param {String} interrupt The interrupt value to use.
-		 * @param {SoundInstance} instance The sound instance that will go in the channel if successful.
-		 * @return {Boolean} Determines if there is an available slot. Depending on the interrupt mode, if there are no slots,
-		 * an existing SoundInstance may be interrupted. If there are no slots, this method returns false.
-		 */
-		getSlot:function (interrupt, instance) {
-			var target, replacement;
-
-			for (var i = 0, l = this.max; i < l; i++) {
-				target = this.get(i);
-
-				// Available Space
-				if (target == null) {
-					return true;
-				} else if (interrupt == Sound.INTERRUPT_NONE && target.playState != Sound.PLAY_FINISHED) {
-					continue;
-				}
-
-				// First replacement candidate
-				if (i == 0) {
-					replacement = target;
-					continue;
-				}
-
-				// Audio is complete or not playing
-				if (target.playState == Sound.PLAY_FINISHED ||
-						target.playState == Sound.PLAY_INTERRUPTED ||
-						target.playState == Sound.PLAY_FAILED) {
-					replacement = target;
-
-					// Audio is a better candidate than the current target, according to playhead
-				} else if (
-						(interrupt == Sound.INTERRUPT_EARLY && target.getPosition() < replacement.getPosition()) ||
-								(interrupt == Sound.INTERRUPT_LATE && target.getPosition() > replacement.getPosition())) {
-					replacement = target;
-				}
-			}
-
-			if (replacement != null) {
-				replacement.interrupt();
-				this.remove(replacement);
-				return true;
-			}
+	/**
+	 * Add a new instance to the channel.
+	 * #method add
+	 * @param {SoundInstance} instance The instance to add.
+	 * @return {Boolean} The success of the method call. If the channel is full, it will return false.
+	 */
+	p.add = function (instance, interrupt) {
+		if (!this.getSlot(interrupt, instance)) {
 			return false;
-		},
+		}
+		this.instances.push(instance);
+		this.length++;
+		return true;
+	};
 
-		toString:function () {
-			return "[Sound SoundChannel]";
+	/**
+	 * Remove an instance from the channel, either when it has finished playing, or it has been interrupted.
+	 * #method remove
+	 * @param {SoundInstance} instance The instance to remove
+	 * @return {Boolean} The success of the remove call. If the instance is not found in this channel, it will
+	 * return false.
+	 */
+	p.remove = function (instance) {
+		var index = createjs.indexOf(this.instances, instance);
+		if (index == -1) {
+			return false;
+		}
+		this.instances.splice(index, 1);
+		this.length--;
+		return true;
+	};
+
+	/**
+	 * Stop playback and remove all instances from the channel.  Usually in response to a delete call.
+	 * #method removeAll
+	 */
+	p.removeAll = function () {
+		// Note that stop() removes the item from the list, but we don't want to assume that.
+		for (var i=this.length-1; i>=0; i--) {
+			this.instances[i].stop();
+		}
+	};
+
+	/**
+	 * Get an available slot depending on interrupt value and if slots are available.
+	 * #method getSlot
+	 * @param {String} interrupt The interrupt value to use.
+	 * @param {SoundInstance} instance The sound instance that will go in the channel if successful.
+	 * @return {Boolean} Determines if there is an available slot. Depending on the interrupt mode, if there are no slots,
+	 * an existing SoundInstance may be interrupted. If there are no slots, this method returns false.
+	 */
+	p.getSlot = function (interrupt, instance) {
+		var target, replacement;
+
+		for (var i = 0, l = this.max; i < l; i++) {
+			target = this.get(i);
+
+			// Available Space
+			if (target == null) {
+				return true;
+			} else if (interrupt == Sound.INTERRUPT_NONE && target.playState != Sound.PLAY_FINISHED) {
+				continue;
+			}
+
+			// First replacement candidate
+			if (i == 0) {
+				replacement = target;
+				continue;
+			}
+
+			// Audio is complete or not playing
+			if (target.playState == Sound.PLAY_FINISHED ||
+					target.playState == Sound.PLAY_INTERRUPTED ||
+					target.playState == Sound.PLAY_FAILED) {
+				replacement = target;
+
+				// Audio is a better candidate than the current target, according to playhead
+			} else if (
+					(interrupt == Sound.INTERRUPT_EARLY && target.getPosition() < replacement.getPosition()) ||
+							(interrupt == Sound.INTERRUPT_LATE && target.getPosition() > replacement.getPosition())) {
+				replacement = target;
+			}
 		}
 
-	}
+		if (replacement != null) {
+			replacement.interrupt();
+			this.remove(replacement);
+			return true;
+		}
+		return false;
+	};
+
+	p.toString = function () {
+		return "[Sound SoundChannel]";
+	};
 
 	// do not add SoundChannel to namespace
 
@@ -1720,6 +1672,13 @@ this.createjs = this.createjs || {};
 
 	Sound.defaultSoundInstance = new SoundInstance();
 
+	//TODO: Moved to createjs/utils/Proxy.js. Deprecate on next version.
+	if (createjs.proxy == null) {
+		createjs.proxy = function() {
+			throw("Proxy has been moved to an external file, and must be included separately.");
+		}
+	}
+
 
 	/**
 	 * An additional module to determine the current browser, version, operating system, and other environment
@@ -1739,7 +1698,7 @@ this.createjs = this.createjs || {};
 	}
 
 	BrowserDetect.init = function () {
-		var agent = navigator.userAgent;
+		var agent = window.navigator.userAgent;
 		BrowserDetect.isFirefox = (agent.indexOf("Firefox") > -1);
 		BrowserDetect.isOpera = (window.opera != null);
 		BrowserDetect.isChrome = (agent.indexOf("Chrome") > -1);  // NOTE that Chrome on Android returns true but is a completely different browser with different abilities
@@ -1751,6 +1710,5 @@ this.createjs = this.createjs || {};
 	BrowserDetect.init();
 
 	createjs.Sound.BrowserDetect = BrowserDetect;
-
 
 }());
