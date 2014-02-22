@@ -1,0 +1,19 @@
+{
+    "name": "SoundJS",
+    "version": "0.5.0",
+    "main": "lib/soundjs-0.5.0.min.js",
+    "ignore": [
+        "README.md",
+        "npm-debug.log",
+        "README_CREATEJS_NAMESPACE.txt",
+        "VERSIONS.txt",
+        "tutorials",
+        "tools",
+        "src",
+        "examples",
+        "docs",
+        "build",
+        "dev",
+        "lib/README.txt"
+    ]
+}
