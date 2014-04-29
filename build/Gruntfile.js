@@ -9,10 +9,10 @@ module.exports = function (grunt) {
 				// Default values
 				version: 'NEXT',
 				name: 'soundjs',
-				docsZip: "<%= pkg.name %>_docs-<%= version %>.zip",
+				docsZip: "<%= pkg.name %>_docs.zip",
 
 				// Setup doc names / paths.
-				docsName: '<%= pkg.name %>_docs-<%= version %>',
+				docsName: '<%= pkg.name %>_docs',
 				docsZip: "<%= docsName %>.zip",
 				docsFolder: "./output/<%= docsName %>/",
 
@@ -29,8 +29,8 @@ module.exports = function (grunt) {
 					},
 					build: {
 						files: {
-							'output/<%= pkg.name.toLowerCase() %>-<%= version %>.min.js': getConfigValue('source'),
-							'output/flashplugin-<%= version %>.min.js': getConfigValue('flashplugin_source'),
+							'output/<%= pkg.name.toLowerCase() %>.min.js': getConfigValue('source'),
+							'output/flashplugin.min.js': getConfigValue('flashplugin_source'),
 						}
 					}
 				},
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
 					},
 					build: {
 						files: {
-							'output/<%= pkg.name.toLowerCase() %>-<%= version %>.combined.js': getCombinedSource()
+							'output/<%= pkg.name.toLowerCase() %>.combined.js': getCombinedSource()
 						}
 					}
 				},
