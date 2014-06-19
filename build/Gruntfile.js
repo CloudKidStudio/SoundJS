@@ -208,7 +208,7 @@ module.exports = function (grunt) {
 	 *
 	 */
 	grunt.registerTask('coreBuild', [
-		"updateversion", "uglify", "docs", "copy:src"
+		"updateversion", "uglify", "concat", "docs", "copy:src"
 	]);
 
 	/**
