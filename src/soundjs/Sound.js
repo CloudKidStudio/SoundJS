@@ -980,12 +980,22 @@ this.createjs = this.createjs || {};
 		for (var i = 0, l = sounds.length; i < l; i++) {
 			var sound = sounds[i];
 
-			var match = sound.match(s.FILE_PATTERN);
+			/*var match = sound.match(s.FILE_PATTERN);
 			if (match == null) {
 				return false;
 			}
 			var name = match[4];
-			var ext = match[5];
+			var ext = match[5];*/
+			var ext, name;
+			if(sound.indexOf(".") > 0)
+			{
+				ext = sound.substr(sound.lastIndexOf(".")+1);
+				if(ext.indexOf("?") > 0)
+					ext = ext.substring(0, ext.indexOf("?"));
+				name = sound.substring(0, sound.lastIndexOf("."));
+				if(name.indexOf("/") >= 0)
+					name = name.substr(name.lastIndexOf("/")+1);
+			}
 
 			if (c[ext] && createjs.indexOf(s.SUPPORTED_EXTENSIONS, ext) > -1) {
 				ret.name = name;
