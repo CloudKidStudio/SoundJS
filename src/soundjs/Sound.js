@@ -562,7 +562,11 @@ this.createjs = this.createjs || {};
 	 */
 	s._handleLoadComplete = function(event) {
 		var src = event.target.getItem().src;
-		if (!s._preloadHash[src]) {return;}
+		if (!s.preloadHash[src]) {
+			//set this to true so it is still valid to detect if the audio has been loaded
+			s.preloadHash[src] = [true];
+			return;
+		}
 
 		for (var i = 0, l = s._preloadHash[src].length; i < l; i++) {
 			var item = s._preloadHash[src][i];
@@ -1080,7 +1084,7 @@ this.createjs = this.createjs || {};
 		} else {
 			src = s._getSrcById(src).src;
 		}
-		return (s._preloadHash[src][0] == true);  // src only loads once, so if it's true for the first it's true for all
+		return (s.preloadHash[src] && s._preloadHash[src][0] == true);  // src only loads once, so if it's true for the first it's true for all
 	};
 
 	/**
@@ -1096,18 +1100,32 @@ this.createjs = this.createjs || {};
 	s._parsePath = function (value) {
 		if (typeof(value) != "string") {value = value.toString();}
 
-		var match = value.match(s.FILE_PATTERN);
+		/*var match = value.match(s.FILE_PATTERN);
 		if (match == null) {return false;}
 
 		var name = match[4];
-		var ext = match[5];
+		var ext = match[5];*/
+		//Changed how extensions and filenames are grabbed from the url to add simple support for
+		//urls that use php services & query string params to specify the file
+		var ext, name, origExt;
+		if(sound.indexOf(".") > 0)
+		{
+			ext = sound.substr(sound.lastIndexOf(".")+1);
+			if(ext.indexOf("?") > 0)
+				ext = ext.substring(0, ext.indexOf("?"));
+			name = sound.substring(0, sound.lastIndexOf("."));
+			if(name.indexOf("/") >= 0)
+				name = name.substr(name.lastIndexOf("/")+1);
+			origExt = ext;
+		}
+		
 		var c = s.getCapabilities();
 		var i = 0;
 		while (!c[ext]) {
 			ext = s.alternateExtensions[i++];
 			if (i > s.alternateExtensions.length) { return null;}	// no extensions are supported
 		}
-		value = value.replace("."+match[5], "."+ext);
+		value = value.replace("."+origExt, "."+ext);
 
 		var ret = {name:name, src:value, extension:ext};
 		return ret;
@@ -1326,6 +1344,38 @@ this.createjs = this.createjs || {};
 		var instances = this._instances;
 		for (var i = instances.length; i--; ) {
 			instances[i].stop();  // NOTE stop removes instance from this._instances
+		}
+	};
+	
+	/**
+	 * Pauses all audio (global pause on existing audio).
+	 *
+	 * <h4>Example</h4>
+	 *     createjs.Sound.pause();
+	 *
+	 * @method pause
+	 * @static
+	 */
+	s.pause = function () {
+		var instances = this.instances;
+		for (var i = instances.length; i--; ) {
+			instances[i].paused = true;
+		}
+	};
+
+	/**
+	 * Resumes all audio (global resume on existing audio).
+	 *
+	 * <h4>Example</h4>
+	 *     createjs.Sound.resume();
+	 *
+	 * @method resume
+	 * @static
+	 */
+	s.resume = function () {
+		var instances = this.instances;
+		for (var i = instances.length; i--; ) {
+			instances[i].paused = false;
 		}
 	};
 

@@ -11,6 +11,7 @@
 	import flash.utils.Dictionary;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
+	import flash.system.Security;
 
 	public class FlashAudioPlugin extends Sprite {
 
@@ -540,7 +541,7 @@ class SoundWrapper extends EventDispatcher {
 	 */
 	public function resume():void {
 		_paused = false;
-        startSound(offset, true);
+		startSound(offset, true);
 	}
 
 	/**
@@ -550,7 +551,7 @@ class SoundWrapper extends EventDispatcher {
 		if (channel != null) {
 			channel.stop();
 		}
-        offset = 0;
+		offset = 0;
 		destroy();
 	}
 
@@ -601,7 +602,7 @@ class SoundWrapper extends EventDispatcher {
 	}
 
 	// Begin playing the sound at a certain position.
-	protected function startSound(startAt:Number):void {
+	protected function startSound(startAt:Number, isResuming:Boolean = false):void {
 		startAt += this._startTime;
 		if (startAt > sound.length) {
 			owner.log("Can not play, out of range");
@@ -609,11 +610,20 @@ class SoundWrapper extends EventDispatcher {
 			return;
 		}
 		if (!_paused) {
-			channel = sound.play(startAt);
-			channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete, false, 0, true);
+			//fixed resuming of looping audio, also made audio loop gaplessly if it will loop
+			//infinitely anyway
+			channel = sound.play(startAt, (loop == -1 && !isResuming) ? int.MAX_VALUE : 0);
+			//fixed null ref errors from invalid audio or a lack of sound channels
+			if(channel)
+				channel.addEventListener(Event.SOUND_COMPLETE, handleSoundComplete, false, 0, true);
+			else
+			{
+				owner.log("Error - could not play sound: " + id);
+				dispatchEvent(new Event(Event.SOUND_COMPLETE));
+			}
 		} else {
-            offset = startAt - this._startTime;  // allows you to set position on a paused or stopped sound
-        }
+			offset = startAt - this._startTime;  // allows you to set position on a paused or stopped sound
+		}
 		updateVolume();
 	}
 
@@ -644,6 +654,7 @@ class SoundWrapper extends EventDispatcher {
 	protected function handleSoundComplete(event:Event):void {
         offset = 0;  // have to set this as it can be set by pause during playback
         if (loop != 0) {
+			//only decrement loop if it is not -1
             if(loop > 0) loop--;  // NOTE this introduces a theoretical limit on loops = float max size x 2 - 1
 
             startSound(offset);
