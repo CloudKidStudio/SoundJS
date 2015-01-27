@@ -128,7 +128,8 @@ module.exports = function (grunt) {
 					},
 					src: {
 						files: [
-							{expand: true, cwd:'./output/', src: '**.js', dest: '../lib/'}
+							{expand: true, cwd:'./output/', src: '**.js', dest: '../lib/'},
+							{expand: true, cwd:'../src/soundjs/flashaudio/', src: '**.swf', dest: '../lib/'}
 						]
 					}
 				},
