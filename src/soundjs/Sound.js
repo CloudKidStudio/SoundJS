@@ -564,7 +564,7 @@ this.createjs = this.createjs || {};
 		var src = event.target.getItem().src;
 		if (!s.preloadHash[src]) {
 			//set this to true so it is still valid to detect if the audio has been loaded
-			s.preloadHash[src] = [true];
+			//s.preloadHash[src] = [true];
 			return;
 		}
 

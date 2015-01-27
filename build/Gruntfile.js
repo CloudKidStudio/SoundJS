@@ -27,8 +27,8 @@ module.exports = function (grunt) {
 					},
 					build: {
 						files: {
-							'output/<%= pkg.name.toLowerCase() %>-<%= version %>.min.js': getConfigValue('source'),
-							'output/flashaudioplugin-<%= version %>.min.js': getConfigValue('flashaudioplugin_source'),
+							'output/<%= pkg.name.toLowerCase() %>.min.js': getConfigValue('source'),
+							'output/flashaudioplugin.min.js': getConfigValue('flashaudioplugin_source'),
 						}
 					}
 				},
@@ -67,10 +67,10 @@ module.exports = function (grunt) {
 					},
 					build: {
 						files: {
-							'output/<%= pkg.name.toLowerCase() %>-<%= version %>.combined.js': combineSource([
+							'output/<%= pkg.name.toLowerCase() %>.combined.js': combineSource([
 										{cwd: '', config:'config.json', source:'source'}
 									]),
-							'output/flashaudioplugin-<%= version %>.combined.js': combineSource([
+							'output/flashaudioplugin.combined.js': combineSource([
 																	{cwd: '', config:'config.json', source:'flashaudioplugin_source'}
 																])
 						}
@@ -128,7 +128,7 @@ module.exports = function (grunt) {
 					},
 					src: {
 						files: [
-							{expand: true, cwd:'./output/', src: '*<%=version %>*.js', dest: '../lib/'}
+							{expand: true, cwd:'./output/', src: '**.js', dest: '../lib/'}
 						]
 					}
 				},
