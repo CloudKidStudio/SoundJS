@@ -52,3 +52,12 @@ register this plugin.
 
 ## [Documentation and examples](http://createjs.com/Docs/SoundJS/)
 Have a look at the included examples and API documentation for more in-depth information.
+
+
+## Changes for SpringRoll
+* The FlashAudioPlugin as3 class uses startSound() a little differently to support proper resuming of looped audio.
+* The FlashAudioPlugin as3 class allows all domains to embed it.
+* The FlashAudioPlugin as3 class plays infinitely looping audio differently to allow it to play gaplessly - this prevents notification when a loop completes in that case.
+* FlashAudioPlugin can handle changing the master volume before the swf is loaded.
+* Sound gets the extension and filename differently from the url so that assets retrieved via PHP service don't break it.
+* Added global pause() and resume() to Sound.

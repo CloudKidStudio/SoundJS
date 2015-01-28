@@ -351,7 +351,7 @@ this.createjs = this.createjs || {};
 			this._flash.register(this._queuedInstances[i]);  // NOTE this flash function currently does nothing
 		}
 		this._queuedInstances.length = 0;
-
+		this._updateVolume();
 	};
 
 	/**
@@ -362,6 +362,7 @@ this.createjs = this.createjs || {};
 	 * @since 0.4.0
 	 */
 	p._updateVolume = function () {
+		if(!this.flashReady) return true;
 		var newVolume = createjs.Sound._masterMute ? 0 : this._volume;
 		return this._flash.setMasterVolume(newVolume);
 	};
