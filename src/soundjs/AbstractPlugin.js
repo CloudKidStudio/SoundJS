@@ -93,6 +93,14 @@ this.createjs = this.createjs || {};
 		 * @protected;
 		 */
 		this._soundInstanceClass;
+		
+		/**
+		 * The master volume of the plugin, which affects all SoundInstances.
+		 * Default is 1.
+		 * @type {Number}
+		 * @protected
+		 */
+		this._volume = 1;
 	};
 	var p = AbstractPlugin.prototype;
 

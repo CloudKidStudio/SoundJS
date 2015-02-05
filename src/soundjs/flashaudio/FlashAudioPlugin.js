@@ -345,13 +345,14 @@ this.createjs = this.createjs || {};
 
 		this._loaderClass.setFlash(this._flash);
 		this._soundInstanceClass.setFlash(this._flash);
+		
+		this._updateVolume();
 
 		// Anything that needed to be preloaded, can now do so.
 		for (var i = 0, l = this._queuedInstances.length; i < l; i++) {
 			this._flash.register(this._queuedInstances[i]);  // NOTE this flash function currently does nothing
 		}
 		this._queuedInstances.length = 0;
-		this._updateVolume();
 	};
 
 	/**
