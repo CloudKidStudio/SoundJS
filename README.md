@@ -62,3 +62,4 @@ Have a look at the included examples and API documentation for more in-depth inf
 * Sound gets the extension and filename differently from the url so that assets retrieved via PHP service don't break it.
 * Added global pause() and resume() to Sound.
 * Added _volume as a property to AbstractPlugin so it wouldn't be undefined before setVolume() was called
+* Made a small change to XHRRequest's _checkError() to be more Cordova friendly.
