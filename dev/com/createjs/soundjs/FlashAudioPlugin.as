@@ -91,7 +91,7 @@
 				getDurationBySrc: handleGetDurationBySrc,
 				setLoop: handleSetLoop,
 
-                setMasterVolume: handleSetMasterVolume,
+				setMasterVolume: handleSetMasterVolume,
 
 				command: handleCommand
 			};
@@ -106,7 +106,7 @@
 				for (var n:String in map) {
 					ExternalInterface.addCallback(n, map[n]);
 				}
-                // NOTE this is in an ENTER_FRAME to deal with a race issue in IE caused by caching
+				// NOTE this is in an ENTER_FRAME to deal with a race issue in IE caused by caching
 				this.addEventListener(Event.ENTER_FRAME, handleReady, false, 0, true);
 			} catch (e:*) {
 				handleError(e);
@@ -207,7 +207,7 @@
 
 			lookup[id] = wrapper;
 			wrapper.addEventListener(Event.SOUND_COMPLETE, handleSoundFinished, false, 0, true);
-            wrapper.addEventListener("loop", handleSoundLoop, false, 0, true);
+			wrapper.addEventListener("loop", handleSoundLoop, false, 0, true);
 			wrapper.addEventListener("interrupt", handleSoundInterrupt, false, 0, true);
 			log("Play Sound", id, src, "o:",offset, "l:",loop, "v:",volume, "p:",pan, "sT:",startTime, "d:",duration, "mv:",masterVolume);
 			return id;
@@ -222,14 +222,14 @@
 			log("Complete", wrapper.id, "Remaining:", activeSoundCount);
 		}
 
-        // An instance loop callback.
-        protected function handleSoundLoop(event:Event):void {
-            var wrapper:SoundWrapper = event.target as SoundWrapper;
-            ExternalInterface.call(SOUND_CALLBACK, wrapper.id, "handleSoundLoop");
-            log("Loop", wrapper.id, "Remaining:", wrapper.loop);
-        }
+		// An instance loop callback.
+		protected function handleSoundLoop(event:Event):void {
+			var wrapper:SoundWrapper = event.target as SoundWrapper;
+			ExternalInterface.call(SOUND_CALLBACK, wrapper.id, "handleSoundLoop");
+			log("Loop", wrapper.id, "Remaining:", wrapper.loop);
+		}
 
-        protected function handleSoundInterrupt(id:String):void {
+		protected function handleSoundInterrupt(id:String):void {
 			var wrapper:SoundWrapper = getWrapper(id, true);
 			if (wrapper != null) {
 				log("Interrupted", wrapper.id);
@@ -582,17 +582,17 @@ class SoundWrapper extends EventDispatcher {
 
 	/** Get/Set the playhead position. */
 	public function get position():Number {
-        if (channel != null && !_paused) {
-            return channel.position - this._startTime;
-        }
-        return offset;
-    }
+		if (channel != null && !_paused) {
+			return channel.position - this._startTime;
+		}
+		return offset;
+	}
 
 	/** @private */
 	public function set position(value:Number):void {
-        if (channel != null) {
-            channel.stop();
-        }
+		if (channel != null) {
+			channel.stop();
+		}
 		startSound(value);
 	}
 
@@ -652,17 +652,17 @@ class SoundWrapper extends EventDispatcher {
 
 	// Sound playback has completed.
 	protected function handleSoundComplete(event:Event):void {
-        offset = 0;  // have to set this as it can be set by pause during playback
-        if (loop != 0) {
+		offset = 0;  // have to set this as it can be set by pause during playback
+		if (loop != 0) {
 			//only decrement loop if it is not -1
-            if(loop > 0) loop--;  // NOTE this introduces a theoretical limit on loops = float max size x 2 - 1
+			if(loop > 0) loop--;  // NOTE this introduces a theoretical limit on loops = float max size x 2 - 1
 
-            startSound(offset);
+			startSound(offset);
 
-            dispatchEvent(new Event("loop"));
-        } else {
-            dispatchEvent(event);
-        }
+			dispatchEvent(new Event("loop"));
+		} else {
+			dispatchEvent(event);
+		}
 	}
 
 	// An error has occurred.
