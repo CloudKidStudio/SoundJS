@@ -59,7 +59,9 @@ Have a look at the included examples and API documentation for more in-depth inf
 * The FlashAudioPlugin as3 class allows all domains to embed it.
 * The FlashAudioPlugin as3 class plays infinitely looping audio differently to allow it to play gaplessly - this prevents notification when a loop completes in that case.
 * FlashAudioPlugin can handle changing the master volume before the swf is loaded.
+* Changed how FlashAudioPlugin handles loaded files to avoid reloading files each time you play a sound.
 * Sound gets the extension and filename differently from the url so that assets retrieved via PHP service don't break it.
 * Added global pause() and resume() to Sound.
 * Added _volume as a property to AbstractPlugin so it wouldn't be undefined before setVolume() was called
 * Made a small change to XHRRequest's _checkError() to be more Cordova friendly.
+* Added a check in WebAudioSoundInstance to avoid having negative sound durations, which throws errors.

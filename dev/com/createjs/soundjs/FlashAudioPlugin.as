@@ -43,6 +43,7 @@
 		protected var playbackTimer:Timer = new Timer(50);
 		public var masterVolume:Number = 1;
 		public var soundDurationHash:Object;
+		public var soundHash:Object;
 
 	// UI Elements:
 	// ** AUTO-UI ELEMENTS **
@@ -59,6 +60,7 @@
 			lookup = {};
 			preloadHash = {};
 			soundDurationHash = {};
+			soundHash = {};
 			preloadLookup = new Dictionary();
 		}
 
@@ -173,12 +175,17 @@
 
 		protected function handleLoadComplete(event:Event):void {
 			var id = preloadLookup[event.target];
-			ExternalInterface.call(PRELOAD_CALLBACK, id, "handleComplete");
 			delete preloadLookup[event.target];
-			delete preloadHash[id];
 			var src = soundDurationHash[id];
+			var sound = preloadHash[id];
+			sound.removeEventListener(ProgressEvent.PROGRESS, handleLoadProgress, false);
+			sound.removeEventListener(Event.COMPLETE, handleLoadComplete, false);
+			sound.removeEventListener(IOErrorEvent.IO_ERROR, handleLoadError, false);
+			soundHash[src] = sound;
+			delete preloadHash[id];
 			soundDurationHash[src] = event.target.length;
 			delete soundDurationHash[id];
+			ExternalInterface.call(PRELOAD_CALLBACK, id, "handleComplete");
 			log("Preload Complete", id);
 		}
 
@@ -477,11 +484,18 @@ class SoundWrapper extends EventDispatcher {
 		this._startTime = startTime;
 		this._duration = duration;
 		this.owner = owner;
-
-		sound = new Sound();
-		sound.addEventListener(IOErrorEvent.IO_ERROR, handleSoundError, false, 0, true);
-		sound.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSoundError, false, 0, true);
-		sound.addEventListener(Event.COMPLETE, handleSoundLoaded, false, 0, true);
+		
+		if(owner.soundHash[src])
+		{
+			sound = owner.soundHash[src];
+		}
+		else
+		{
+			sound = new Sound();
+			sound.addEventListener(IOErrorEvent.IO_ERROR, handleSoundError, false, 0, true);
+			sound.addEventListener(SecurityErrorEvent.SECURITY_ERROR, handleSoundError, false, 0, true);
+			sound.addEventListener(Event.COMPLETE, handleSoundLoaded, false, 0, true);
+		}
 	}
 
 	/**
@@ -497,7 +511,14 @@ class SoundWrapper extends EventDispatcher {
 		this.loop = loop;
 		this._volume = volume;
 		this._pan = pan;
-		sound.load(new URLRequest(src));
+		if(sound.bytesTotal > 0 && sound.bytesTotal == sound.bytesLoaded)
+		{
+			startSound(offset);
+		}
+		else
+		{
+			sound.load(new URLRequest(src));
+		}
 	}
 
 	/**

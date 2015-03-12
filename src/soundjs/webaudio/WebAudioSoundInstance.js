@@ -258,6 +258,8 @@ this.createjs = this.createjs || {};
 		audioNode.buffer = this.playbackResource;
 		audioNode.connect(this.panNode);
 		var dur = this._duration * 0.001;
+		if(offset > dur)
+			offset = dur - 0.001;
 		audioNode.startTime = startTime + dur;
 		audioNode.start(audioNode.startTime, offset+(this._startTime*0.001), dur - offset);
 		return audioNode;
