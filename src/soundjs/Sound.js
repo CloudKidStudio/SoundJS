@@ -1495,6 +1495,12 @@ this.createjs = this.createjs || {};
 		SoundChannel.remove(instance);
 		var index = createjs.indexOf(this._instances, instance);
 		if (index > -1) {this._instances.splice(index, 1);}	// OJR this will always be > -1, there is no way for an instance to exist without being added to this._instances
+		//MMB 9/2015: sounds were being removed from _instances, but not from activePlugin._soundInstances
+		var soundInstances = s.activePlugin._soundInstances;
+		if (soundInstances[instance.src] && soundInstances[instance.src].indexOf(instance) > -1)
+		{
+			soundInstances[instance.src].splice(soundInstances[instance.src].indexOf(instance), 1);
+		}
 	};
 
 	createjs.Sound = Sound;
@@ -1708,6 +1714,12 @@ this.createjs = this.createjs || {};
 	 * return false.
 	 */
 	p._remove = function (instance) {
+		//MMB 9/2015: sounds were being removed from _instances, but not from activePlugin._soundInstances
+		var soundInstances = s.activePlugin._soundInstances;
+		if (soundInstances[instance.src] && soundInstances[instance.src].indexOf(instance) > -1)
+		{
+			soundInstances[instance.src].splice(soundInstances[instance.src].indexOf(instance), 1);
+		}
 		var index = createjs.indexOf(this._instances, instance);
 		if (index == -1) {return false;}
 		this._instances.splice(index, 1);
