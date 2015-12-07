@@ -1,6 +1,64 @@
-Version NEXT [not yet released]
+Version NEXT [Not yet released]
 ****************************************************************************************************
+
+
+Version 0.6.2 [November 26, 2015]
+****************************************************************************************************
+CRITICAL
+- fixed pan issue introduced in Chrome 44, where undefined pan defaulted to left channel only
+
+*****
+- fixed an issue in HTMLAudioPlugin that prevented SoundInstances created before loading was
+  complete from playing (github issue 167)
+- bower updates
+- documentation updates
+- added a reuseable scratch buffer, instead of recreating each time (thanks @konistehrad)
+- added automatic "playEmptySound" support on iOS to unlock the WebAudio context
+- bug fixes
+
+
+Version 0.6.1-HOTFIX [October 8, 2015]
+****************************************************************************************************
+- fixed issue with panning in Chrome, caused by an unset pan value in WebAudio. This minor fix is
+  provided to fix existing content online that was broken with a browser update.
+
+
+Version 0.6.1 [May 21,2015]
+****************************************************************************************************
+CRITICAL (may break existing content):
+- removed support for ie8 and deprecated related get/set methods
+
+*****
 - fixed typo in HTMLAudioSoundInstance for this._stalledHandler from this.playFailed to this._playFailed
+- fixed a reference in WebAudioLoader from this._handleError to this._sendError
+- updated HTMLAudio loading to properly dispatch error events
+- fixed issue with reloading canceled audio when used with PreloadJS (github issue 143)
+- fixed issue that would break loaded audio if you registered it a 2nd time (github issue 148)
+- added AudioSprite class to document audiosprite more clearly
+- added muted and volume properties to Sound, and deprecated get/setMute and get/setVolume
+- added capabilities property to Sound, and deprecated getCapabilities and getCapability
+- refactor HTMLAudioTagPool as Chrome no longer requires tags be pre-created
+- deprecate HTMLAudioPlugin defaultNumChannels and cleaned up associated code
+- fixed github issue 154, FlashAudioPlugin not properly setting volume and pan on play calls
+- fixed FlashAudioSoundInstance bug that did not change loop value properly on playing instances
+- fixed registerSounds to support an object file with a path and manifest property (mimics preloadjs option)
+- added support for alternate loading paths and for loading files without extensions
+  via loading objects where src is an object that contains extension properties along with paths
+  example: {id:"music", src:{mp3:"myMP3Path/music.mp3", ogg:"myOggPath/musicWithoutExtension"}}
+- fixed setting duration on an existing SoundInstance in HTMLAudioSoundInstance
+- fixed setting duration on an existing SoundInstance in WebAudioPlugin
+- added SoundInstance.startTime support
+- added PlayPropsConfig class which is now used in all play calls.  Deprecated passing individual properties
+- added startTime and duration handling to SoundInstance.play when passed in an Object or PlayPropsConfig
+- added applyPlayProps to AbstractSoundInstance, to apply multiple properties at once
+- added defaultPlayProps to registerSound and registerSounds, allowing the setting of default play properties that will be applied to each new instance of a given src
+  example: {id: "Humm (mp3)", src: "Humm.mp3", defaultPlayProps:{interrupt:createjs.Sound.INTERRUPT_ANY, loop:-1, offset: 2000}}
+- added get/setDefaultPlayProps to Sound, allowing the retrieval and setting of default play properties that will be applied to each new instance of a given src
+- fix HTMLAudioPlugin.capabilities.panning value to be false
+- fix HTMLAudioPlugin.updateStartTime to correct HTMLAudioPlugin._updateStartTime
+- added CordovaAudioPlugin, for use with Cordova based apps including PhoneGap and Ionic
+- fix Sound.loadComplete throwing errors for src that has not been loaded instead of expected false
+- fix missing ._volume property on AbstractPlugin
 
 
 Version 0.6.0 [December 12, 2014]

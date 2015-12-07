@@ -45,18 +45,29 @@ this.createjs = this.createjs || {};
 
 	 * <h4>Known Browser and OS issues for Web Audio</h4>
 	 * <b>Firefox 25</b>
-	 * <ul><li>mp3 audio files do not load properly on all windows machines, reported
-	 * <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=929969" target="_blank">here</a>. </br>
-	 * For this reason it is recommended to pass another FF supported type (ie ogg) first until this bug is resolved, if possible.</li></ul>
-	 * <br />
+	 * <li>
+	 *     mp3 audio files do not load properly on all windows machines, reported <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=929969" target="_blank">here</a>.
+	 *     <br />For this reason it is recommended to pass another FireFox-supported type (i.e. ogg) as the default
+	 *     extension, until this bug is resolved
+	 * </li>
+	 *
 	 * <b>Webkit (Chrome and Safari)</b>
-	 * <ul><li>AudioNode.disconnect does not always seem to work.  This can cause the file size to grow over time if you
-	 * are playing a lot of audio files.</li></ul>
-	 * <br />
+	 * <li>
+	 *     AudioNode.disconnect does not always seem to work.  This can cause the file size to grow over time if you
+	 * 	   are playing a lot of audio files.
+	 * </li>
+	 *
 	 * <b>iOS 6 limitations</b>
-	 * 	<ul><li>Sound is initially muted and will only unmute through play being called inside a user initiated event (touch/click).</li>
-	 *	<li>A bug exists that will distort uncached audio when a video element is present in the DOM.  You can avoid this bug
-	 * 	by ensuring the audio and video audio share the same sampleRate.</li>
+	 * <ul>
+	 *     <li>
+	 *         Sound is initially muted and will only unmute through play being called inside a user initiated event
+	 *         (touch/click). Please read the mobile playback notes in the the {{#crossLink "Sound"}}{{/crossLink}}
+	 *         class for a full overview of the limitations, and how to get around them.
+	 *     </li>
+	 *	   <li>
+	 *	       A bug exists that will distort un-cached audio when a video element is present in the DOM. You can avoid
+	 *	       this bug by ensuring the audio and video audio share the same sample rate.
+	 *	   </li>
 	 * </ul>
 	 * @class WebAudioPlugin
 	 * @extends AbstractPlugin
@@ -75,15 +86,6 @@ this.createjs = this.createjs || {};
 		 * @protected
 		 */
 		this._panningModel = s._panningModel;;
-
-		/**
-		 * The internal master volume value of the plugin.
-		 * @property _volume
-		 * @type {Number}
-		 * @default 1
-		 * @protected
-		 */
-		this._volume = 1;
 
 		/**
 		 * The web audio context, which WebAudio uses to play audio. All nodes that interact with the WebAudioPlugin
@@ -163,6 +165,30 @@ this.createjs = this.createjs || {};
 	 */
 	s.context = null;
 
+	/**
+	 * The scratch buffer that will be assigned to the buffer property of a source node on close.
+	 * Works around an iOS Safari bug: https://github.com/CreateJS/SoundJS/issues/102
+	 *
+	 * Advanced users can set this to an existing source node, but <b>must</b> do so before they call
+	 * {{#crossLink "Sound/registerPlugins"}}{{/crossLink}} or {{#crossLink "Sound/initializeDefaultPlugins"}}{{/crossLink}}.
+	 *
+	 * @property _scratchBuffer
+	 * @type {AudioBuffer}
+	 * @protected
+	 * @static
+	 */
+	 s._scratchBuffer = null;
+
+	/**
+	 * Indicated whether audio on iOS has been unlocked, which requires a touchend/mousedown event that plays an
+	 * empty sound.
+	 * @property _unlocked
+	 * @type {boolean}
+	 * @since 0.6.2
+	 * @private
+	 */
+	s._unlocked = false;
+
 
 // Static Public Methods
 	/**
@@ -198,8 +224,9 @@ this.createjs = this.createjs || {};
 	 * @since 0.4.1
 	 */
 	s.playEmptySound = function() {
+		if (s.context == null) {return;}
 		var source = s.context.createBufferSource();
-		source.buffer = s.context.createBuffer(1, 1, 22050);
+		source.buffer = s._scratchBuffer;
 		source.connect(s.context.destination);
 		source.start(0, 0, 0);
 	};
@@ -261,11 +288,19 @@ this.createjs = this.createjs || {};
 				return null;
 			}
 		}
+		if (s._scratchBuffer == null) {
+			s._scratchBuffer = s.context.createBuffer(1, 1, 22050);
+		}
 
 		s._compatibilitySetUp();
 
-		// playing this inside of a touch event will enable audio on iOS, which starts muted
-		s.playEmptySound();
+		// Listen for document level clicks to unlock WebAudio on iOS. See the _unlock method.
+		if ("ontouchstart" in window && s.context.state != "running") {
+			s._unlock(); // When played inside of a touch event, this will enable audio on iOS immediately.
+			document.addEventListener("mousedown", s._unlock, true);
+			document.addEventListener("touchend", s._unlock, true);
+		}
+
 
 		s._capabilities = {
 			panning:true,
@@ -317,6 +352,28 @@ this.createjs = this.createjs || {};
 		s._panningModel = 0;
 	};
 
+	/**
+	 * Try to unlock audio on iOS. This is triggered from either WebAudio plugin setup (which will work if inside of
+	 * a `mousedown` or `touchend` event stack), or the first document touchend/mousedown event. If it fails (touchend
+	 * will fail if the user presses for too long, indicating a scroll event instead of a click event.
+	 *
+	 * Note that earlier versions of iOS supported `touchstart` for this, but iOS9 removed this functionality. Adding
+	 * a `touchstart` event to support older platforms may preclude a `mousedown` even from getting fired on iOS9, so we
+	 * stick with `mousedown` and `touchend`.
+	 * @method _unlock
+	 * @since 0.6.2
+	 * @private
+	 */
+	s._unlock = function() {
+		if (s._unlocked) { return; }
+		s.playEmptySound();
+		if (s.context.state == "running") {
+			document.removeEventListener("mousedown", s._unlock, true);
+			document.removeEventListener("touchend", s._unlock, true);
+			s._unlocked = true;
+		}
+	};
+
 
 // Public Methods
 	p.toString = function () {
@@ -335,6 +392,7 @@ this.createjs = this.createjs || {};
 	p._addPropsToClasses = function() {
 		var c = this._soundInstanceClass;
 		c.context = this.context;
+		c._scratchBuffer = s._scratchBuffer;
 		c.destinationNode = this.gainNode;
 		c._panningModel = this._panningModel;
 

@@ -42,11 +42,11 @@ this.createjs = this.createjs || {};
 	 * The base loader, which defines all the generic methods, properties, and events. All loaders extend this class,
 	 * including the {{#crossLink "LoadQueue"}}{{/crossLink}}.
 	 * @class AbstractLoader
-	 * @param {LoadItem|object|string} The item to be loaded.
+	 * @param {LoadItem|object|string} loadItem The item to be loaded.
 	 * @param {Boolean} [preferXHR] Determines if the LoadItem should <em>try</em> and load using XHR, or take a
 	 * tag-based approach, which can be better in cross-domain situations. Not all loaders can load using one or the
 	 * other, so this is a suggested directive.
-	 * @oaram {String} [type] The type of loader. Loader types are defined as constants on the AbstractLoader class,
+	 * @param {String} [type] The type of loader. Loader types are defined as constants on the AbstractLoader class,
 	 * such as {{#crossLink "IMAGE:property"}}{{/crossLink}}, {{#crossLink "CSS:property"}}{{/crossLink}}, etc.
 	 * @extends EventDispatcher
 	 */
@@ -70,6 +70,7 @@ this.createjs = this.createjs || {};
 		 * @property canceled
 		 * @type {Boolean}
 		 * @default false
+		 * @readonly
 		 */
 		this.canceled = false;
 
@@ -104,7 +105,18 @@ this.createjs = this.createjs || {};
 		 * can be overridden to provide custom formatting.
 		 *
 		 * Optionally, a resultFormatter can return a callback function in cases where the formatting needs to be
-		 * asynchronous, such as creating a new image.
+		 * asynchronous, such as creating a new image. The callback function is passed 2 parameters, which are callbacks
+		 * to handle success and error conditions in the resultFormatter. Note that the resultFormatter method is
+		 * called in the current scope, as well as the success and error callbacks.
+		 *
+		 * <h4>Example asynchronous resultFormatter</h4>
+		 *
+		 * 	function _formatResult(loader) {
+		 * 		return function(success, error) {
+		 * 			if (errorCondition) { error(errorDetailEvent); }
+		 * 			success(result);
+		 * 		}
+		 * 	}
 		 * @property resultFormatter
 		 * @type {Function}
 		 * @default null
@@ -191,6 +203,7 @@ this.createjs = this.createjs || {};
 	 * @property POST
 	 * @type {string}
 	 * @default post
+	 * @static
 	 */
 	s.POST = "POST";
 
@@ -199,6 +212,7 @@ this.createjs = this.createjs || {};
 	 * @property GET
 	 * @type {string}
 	 * @default get
+	 * @static
 	 */
 	s.GET = "GET";
 
@@ -656,13 +670,13 @@ this.createjs = this.createjs || {};
 	 * @return {Object} The formatted result
 	 * @since 0.6.0
 	 */
-	p.resultFormatter = null; //TODO: Add support for async formatting.
+	p.resultFormatter = null;
 
 	/**
 	 * Handle events from internal requests. By default, loaders will handle, and redispatch the necessary events, but
 	 * this method can be overridden for custom behaviours.
 	 * @method handleEvent
-	 * @param {Event} The event that the internal request dispatches.
+	 * @param {Event} event The event that the internal request dispatches.
 	 * @protected
 	 * @since 0.6.0
 	 */
@@ -671,12 +685,11 @@ this.createjs = this.createjs || {};
 			case "complete":
 				this._rawResult = event.target._response;
 				var result = this.resultFormatter && this.resultFormatter(this);
-				var _this = this;
 				if (result instanceof Function) {
-					result(function(result) {
-						_this._result = result;
-						_this._sendComplete();
-					});
+					result.call(this,
+							createjs.proxy(this._resultFormatSuccess, this),
+							createjs.proxy(this._resultFormatFailed, this)
+					);
 				} else {
 					this._result =  result || this._rawResult;
 					this._sendComplete();
@@ -694,10 +707,33 @@ this.createjs = this.createjs || {};
 			case "abort":
 			case "timeout":
 				if (!this._isCanceled()) {
-					this.dispatchEvent(event.type);
+					this.dispatchEvent(new createjs.ErrorEvent("PRELOAD_" + event.type.toUpperCase() + "_ERROR"));
 				}
 				break;
 		}
+	};
+
+	/**
+	 * The "success" callback passed to {{#crossLink "AbstractLoader/resultFormatter"}}{{/crossLink}} asynchronous
+	 * functions.
+	 * @method _resultFormatSuccess
+	 * @param {Object} result The formatted result
+	 * @private
+	 */
+	p._resultFormatSuccess = function (result) {
+		this._result = result;
+		this._sendComplete();
+	};
+
+	/**
+	 * The "error" callback passed to {{#crossLink "AbstractLoader/resultFormatter"}}{{/crossLink}} asynchronous
+	 * functions.
+	 * @method _resultFormatSuccess
+	 * @param {Object} error The error event
+	 * @private
+	 */
+	p._resultFormatFailed = function (event) {
+		this._sendError(event);
 	};
 
 	/**
