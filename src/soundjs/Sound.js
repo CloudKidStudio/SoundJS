@@ -1199,7 +1199,7 @@ this.createjs = this.createjs || {};
 		//Changed how extensions and filenames are grabbed from the url to add simple support for
 		//urls that use php services & query string params to specify the file
 		var ext, name, origExt;
-		if(value.indexOf(".") > 0)
+		if(value.indexOf(".") >= 0)
 		{
 			ext = value.substr(value.lastIndexOf(".")+1);
 			if(ext.indexOf("?") > 0)
@@ -1209,7 +1209,7 @@ this.createjs = this.createjs || {};
 				name = name.substr(name.lastIndexOf("/")+1);
 			origExt = ext;
 		}
-		
+
 		var c = s.capabilities;
 		var i = 0;
 		while (!c[ext]) {
@@ -1483,7 +1483,7 @@ this.createjs = this.createjs || {};
 		src = s._getSrcById(src);
 		return s._defaultPlayPropsHash[s._parsePath(src.src).src];
 	};
-	
+
 	/**
 	 * Pauses all audio (global pause on existing audio).
 	 *
