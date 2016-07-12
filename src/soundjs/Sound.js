@@ -380,13 +380,14 @@ this.createjs = this.createjs || {};
 
 	/**
 	 * The RegExp pattern used to parse file URIs. This supports simple file names, as well as full domain URIs with
-	 * query strings. The resulting match is: protocol:$1 domain:$2 path:$3 file:$4 extension:$5 query:$6.
+	 * query strings. The resulting match is: protocol:$1 domain:$2 path:$3 file:$4 extension:$5 query:$6 query-file:$7 query-extension:$8.
+	 * "query-file" and "query-extension" are provided if the source file is defined by a query string.
 	 * @property FILE_PATTERN
 	 * @type {RegExp}
 	 * @static
 	 * @protected
 	 */
-	s.FILE_PATTERN = /^(?:(\w+:)\/{2}(\w+(?:\.\w+)*\/?))?([/.]*?(?:[^?]+)?\/)?((?:[^/?]+)\.(\w+))(?:\?(\S+)?)?$/;
+	s.FILE_PATTERN = /^(?:(\w+:)\/{2}(\w+(?:\.\w+)*\/?))?([\/.]*?(?:[^?]+)?\/)?(?:((?:[^\/?]+)\.(\w+))|(?:[^\/?]+))(?:\?((?:(?:[^&]*?[\/=])?(?:((?:(?:[^\/?&=]+)\.(\w+)))\S*?)|\S+))?)?$/;
 
 
 // Class Public properties
@@ -1191,23 +1192,22 @@ this.createjs = this.createjs || {};
 	s._parsePath = function (value) {
 		if (typeof(value) != "string") {value = value.toString();}
 
-		/*var match = value.match(s.FILE_PATTERN);
-		if (match == null) {return false;}
-
-		var name = match[4];
-		var ext = match[5];*/
 		//Changed how extensions and filenames are grabbed from the url to add simple support for
 		//urls that use php services & query string params to specify the file
-		var ext, name, origExt;
-		if(value.indexOf(".") >= 0)
-		{
-			ext = value.substr(value.lastIndexOf(".")+1);
-			if(ext.indexOf("?") > 0)
-				ext = ext.substring(0, ext.indexOf("?"));
-			name = value.substring(0, value.lastIndexOf("."));
-			if(name.indexOf("/") >= 0)
-				name = name.substr(name.lastIndexOf("/")+1);
-			origExt = ext;
+		var match = value.match(s.FILE_PATTERN);
+		if (match === null) {return false;}
+
+		var name = '';
+		var ext = '';
+		var origExt = '';
+		if (s.SUPPORTED_EXTENSIONS.indexOf(match[5]) >= 0) {
+			name = match[4];
+			origExt = ext = match[5];
+		} else if (s.SUPPORTED_EXTENSIONS.indexOf(match[8]) >= 0) {
+			name = match[7];
+			origExt = ext = match[8];
+		} else {
+			return null;
 		}
 
 		var c = s.capabilities;
