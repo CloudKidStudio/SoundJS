@@ -80,7 +80,9 @@ this.createjs = this.createjs || {};
 
 // public methods
 	p.load = function() {
-		this._media = new Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
+		// # feature/sound-fix
+
+		this._media = new window.top.Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
 		this._media.seekTo(0);	// needed to get duration
 
 		this._getMediaDuration();
@@ -110,6 +112,7 @@ this.createjs = this.createjs || {};
 	 */
 	p._getMediaDuration = function() {
 		this._result = this._media.getDuration() * 1000;
+
 		if (this._result < 0) {
 			this._loadTime += this._TIMER_FREQUENCY;
 			if (this._loadTime > this._item.loadTimeout) {

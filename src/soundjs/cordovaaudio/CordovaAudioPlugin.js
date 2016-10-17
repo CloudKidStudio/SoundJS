@@ -108,6 +108,7 @@ this.createjs = this.createjs || {};
 	 * @static
 	 */
 	s.isSupported = function () {
+		// # feature/sound-fix
 		s._generateCapabilities();
 		return (s._capabilities != null);
 	};
@@ -120,7 +121,7 @@ this.createjs = this.createjs || {};
 	 * @protected
 	 */
 	s._generateCapabilities = function () {
-		if (s._capabilities != null || !(window.cordova || window.PhoneGap || window.phonegap) || !window.Media) {return;}
+		if (s._capabilities != null || !(window.top.cordova || window.top.PhoneGap || window.top.phonegap) || !window.top.Media) {return;}
 
 		// OJR my best guess is that Cordova will have the same limits on playback that the audio tag has, but this could be wrong
 		var t = document.createElement("audio");
@@ -169,6 +170,8 @@ this.createjs = this.createjs || {};
 
 // Private Methods
 	p._handlePreloadComplete = function (event) {
+		// #/feature/sound-fix
+
 		var src = event.target.getItem().src;
 		this._srcDurationHash[src] = event.result;
 		this._audioSources[src] = event.result;
@@ -176,6 +179,7 @@ this.createjs = this.createjs || {};
 	};
 
 	p.removeSound = function (src) {
+		// #/feature/sound-fx
 		delete(this._srcDurationHash[src]);
 		this.AbstractPlugin_removeSound(src);
 	};

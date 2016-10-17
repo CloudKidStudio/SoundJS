@@ -93,7 +93,8 @@ this.createjs = this.createjs || {};
 		this._mediaErrorHandler = createjs.proxy(this._handleMediaError, this);
 		this._mediaProgressHandler = createjs.proxy(this._handleMediaProgress, this);
 
-		this._playbackResource = new Media(src, this._mediaPlayFinishedHandler, this._mediaErrorHandler, this._mediaProgressHandler);
+		// # feature/sound-fix
+		this._playbackResource = new window.top.Media(src, this._mediaPlayFinishedHandler, this._mediaErrorHandler, this._mediaProgressHandler);
 
 		if (duration) {
 			this._audioSprite = true;
@@ -177,8 +178,11 @@ this.createjs = this.createjs || {};
 	*/
 
 	p._handleCleanUp = function () {
+		// #/feature/sound-fix
+		console.log('p._handleCleanup');
 		clearTimeout(this._audioSpriteTimeout);
 		this._playbackResource.pause(); // OJR cannot use .stop as it prevents .seekTo from working
+		this._playbackResource.release();
 		// todo consider media.release
 	};
 
