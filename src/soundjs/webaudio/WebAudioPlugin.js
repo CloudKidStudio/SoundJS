@@ -229,6 +229,11 @@ this.createjs = this.createjs || {};
 		source.buffer = s._scratchBuffer;
 		source.connect(s.context.destination);
 		source.start(0, 0, 0);
+
+		//Chrome 55 fix
+        if (source.context.state === 'suspended') {
+            source.context.resume();
+        }
 	};
 
 
@@ -298,6 +303,7 @@ this.createjs = this.createjs || {};
 		if ("ontouchstart" in window && s.context.state != "running") {
 			s._unlock(); // When played inside of a touch event, this will enable audio on iOS immediately.
 			document.addEventListener("mousedown", s._unlock, true);
+			document.addEventListener("touchstart", s._unlock, true);
 			document.addEventListener("touchend", s._unlock, true);
 		}
 
@@ -365,11 +371,17 @@ this.createjs = this.createjs || {};
 	 * @private
 	 */
 	s._unlock = function() {
+
+		if(s.context.state === 'suspended') {
+			s.context.resume();
+		}
+
 		if (s._unlocked) { return; }
 		s.playEmptySound();
 		if (s.context.state == "running") {
 			document.removeEventListener("mousedown", s._unlock, true);
 			document.removeEventListener("touchend", s._unlock, true);
+			document.removeEventListener("touchstart", s._unlock, true);
 			s._unlocked = true;
 		}
 	};
