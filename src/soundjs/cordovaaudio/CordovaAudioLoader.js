@@ -82,7 +82,16 @@ this.createjs = this.createjs || {};
 	p.load = function() {
 		// # feature/sound-fix
 
-		this._media = new window.top.Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
+		if (window.Media) {
+			this._media = new window.Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
+		} else if (window.top.Media) {
+			this._media = new window.top.Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
+		} else {
+			//Could not find Media Object
+			this.handleEvent({type:"error"});
+			return;
+		}
+
 		this._media.seekTo(0);	// needed to get duration
 
 		this._getMediaDuration();

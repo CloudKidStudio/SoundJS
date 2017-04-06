@@ -121,7 +121,14 @@ this.createjs = this.createjs || {};
 	 * @protected
 	 */
 	s._generateCapabilities = function () {
-		if (s._capabilities != null || !(window.top.cordova || window.top.PhoneGap || window.top.phonegap) || !window.top.Media) {return;}
+		if (s._capabilities != null || !(window.cordova || window.PhoneGap || window.phonegap) || !window.Media)
+		{
+			return;
+		}
+		else if (s._capabilities != null || !(window.top.cordova || window.top.PhoneGap || window.top.phonegap) || !window.top.Media)
+		{
+			return;
+		}
 
 		// OJR my best guess is that Cordova will have the same limits on playback that the audio tag has, but this could be wrong
 		var t = document.createElement("audio");
