@@ -80,7 +80,17 @@ this.createjs = this.createjs || {};
 
 // public methods
 	p.load = function() {
-		this._media = new Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
+
+		var cordovaMedia = window.Media || window.top.Media || null;
+
+		if (cordovaMedia) {
+			this._media = new cordovaMedia(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
+		} else {
+			//Could not find Media Object
+			this.handleEvent({type:"error"});
+			return;
+		}
+
 		this._media.seekTo(0);	// needed to get duration
 
 		this._getMediaDuration();
@@ -110,6 +120,7 @@ this.createjs = this.createjs || {};
 	 */
 	p._getMediaDuration = function() {
 		this._result = this._media.getDuration() * 1000;
+
 		if (this._result < 0) {
 			this._loadTime += this._TIMER_FREQUENCY;
 			if (this._loadTime > this._item.loadTimeout) {
