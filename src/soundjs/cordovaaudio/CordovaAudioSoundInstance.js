@@ -93,11 +93,11 @@ this.createjs = this.createjs || {};
 		this._mediaErrorHandler = createjs.proxy(this._handleMediaError, this);
 		this._mediaProgressHandler = createjs.proxy(this._handleMediaProgress, this);
 
-		// # feature/sound-fix
-		if (window.Media) {
-			this._playbackResource = new window.Media(src, this._mediaPlayFinishedHandler, this._mediaErrorHandler, this._mediaProgressHandler);
-		} else if (window.top.Media) {
-			this._playbackResource = new window.top.Media(src, this._mediaPlayFinishedHandler, this._mediaErrorHandler, this._mediaProgressHandler);
+
+		var cordovaMedia = window.Media || window.top.Media || null;
+
+		if (cordovaMedia) {
+			this._playbackResource = new cordovaMedia(src, this._mediaPlayFinishedHandler, this._mediaErrorHandler, this._mediaProgressHandler);
 		}
 
 		if (duration) {
@@ -151,7 +151,7 @@ this.createjs = this.createjs || {};
 		return "[CordovaAudioSoundInstance]";
 	};
 
-//Private Methods
+	//Private Methods
 	/**
 	 * media object has failed and likely will never work
 	 * @method _handleMediaError

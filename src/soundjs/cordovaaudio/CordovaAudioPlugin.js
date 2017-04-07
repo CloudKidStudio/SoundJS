@@ -121,12 +121,12 @@ this.createjs = this.createjs || {};
 	 * @protected
 	 */
 	s._generateCapabilities = function () {
-		if (s._capabilities != null || !(window.cordova || window.PhoneGap || window.phonegap) || !window.Media)
-		{
-			return;
-		}
-		else if (s._capabilities != null || !(window.top.cordova || window.top.PhoneGap || window.top.phonegap) || !window.top.Media)
-		{
+		var cordovaObj = window.cordova || window.top.cordova || null;
+		var phoneGapObj = window.PhoneGap || window.top.PhoneGap || null;
+		var pgObj = window.phonegap || window.top.phonegap || null;
+		var cordovaMedia = window.Media || window.top.Media || null;
+
+		if (s._capabilities != null || !(cordovaObj || phoneGapObj || pgObj) || !cordovaMedia) {
 			return;
 		}
 
@@ -175,9 +175,8 @@ this.createjs = this.createjs || {};
 		return this._srcDurationHash[src];
 	};
 
-// Private Methods
+	// Private Methods
 	p._handlePreloadComplete = function (event) {
-		// #/feature/sound-fix
 
 		var src = event.target.getItem().src;
 		this._srcDurationHash[src] = event.result;

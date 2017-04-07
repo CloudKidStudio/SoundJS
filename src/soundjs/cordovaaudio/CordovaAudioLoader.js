@@ -80,12 +80,11 @@ this.createjs = this.createjs || {};
 
 // public methods
 	p.load = function() {
-		// # feature/sound-fix
 
-		if (window.Media) {
-			this._media = new window.Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
-		} else if (window.top.Media) {
-			this._media = new window.top.Media(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
+		var cordovaMedia = window.Media || window.top.Media || null;
+
+		if (cordovaMedia) {
+			this._media = new cordovaMedia(this._item.src, null, createjs.proxy(this._mediaErrorHandler,this));
 		} else {
 			//Could not find Media Object
 			this.handleEvent({type:"error"});
