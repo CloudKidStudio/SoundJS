@@ -292,6 +292,13 @@ this.createjs = this.createjs || {};
 			} else {
 				return null;
 			}
+
+			// fix for chrome 66 autoplay issue: https://developers.google.com/web/updates/2017/09/autoplay-policy-changes#webaudio
+			document.addEventListener('click', function() {
+				if(s.context.state === 'suspended') {
+					s.context.resume();
+				}
+			});
 		}
 		if (s._scratchBuffer == null) {
 			s._scratchBuffer = s.context.createBuffer(1, 1, 22050);
