@@ -1,0 +1,26 @@
+{
+  "name": "soundjs",
+  "version": "1.0.0",
+  "description": "SoundJS is a library to make working with audio on the web easier. It provides a consistent API for playing audio in\r different browsers, including using a target plugin model to provide an easy way to provide additional audio plugins\r like a Flash fallback. A mechanism has been provided for easily tying in audio preloading to\r [PreloadJS](http://preloadjs.com).",
+  "main": "soundjs.combined.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpringRoll/SoundJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SpringRoll/SoundJS/issues"
+  },
+  "homepage": "https://github.com/SpringRoll/SoundJS#readme"
+}
